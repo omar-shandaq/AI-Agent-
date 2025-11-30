@@ -4788,7 +4788,7 @@
 				    isMultiAgentMode = true;
 					switchToAgentAndSendPrompt(prompt);
 				    activeAgents.forEach(aid => {
-				        sendMessageToAgent(prompt, aid, { silent: aid !== leadAgent });
+				        sendMessageToAgent(prompt, aid, 3, 1000, { silent: aid !== leadAgent });
 				    });
 				
 				    closeModal(document.getElementById('event-modal'));
@@ -7520,6 +7520,7 @@ Keep it brief and executive-level.`;
 
 
 </body></html>
+
 
 
 
