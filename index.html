@@ -4444,40 +4444,6 @@
                 return selectedAgents.map(id => personaData.find(p => p.id === id)).filter(Boolean);
             }
             
-            
-            function selectLeadAgent(prompt) {
-                const activeAgents = getSelectedAgentsInfo().map(a => a.id);
-
-                // Define priority based on specialization
-                const priority = [
-                    'nouf',  // consulting & preparation
-                    'omar',  // operations & scheduling
-                    'layla', // data, charts
-                    'hakim'  // fallback strategist
-                ];
-
-                // Normalize prompt
-                const p = prompt.toLowerCase();
-
-                // Keyword-based adjustments
-                if (p.includes('chart') || p.includes('data') || p.includes('statistics')) {
-                    priority.unshift('layla');
-                }
-
-                if (p.includes('schedule') || p.includes('meeting') || p.includes('coordinate')) {
-                    priority.unshift('omar');
-                }
-
-                if (p.includes('consult') || p.includes('prepare') || p.includes('analysis') || p.includes('advise')) {
-                    priority.unshift('nouf');
-                }
-
-                // Final selection: first active agent in priority list
-                const leadAgent = priority.find(id => activeAgents.includes(id)) || activeAgents[0];
-
-                return { leadAgent, activeAgents };
-            }
-            
             // --- Mode Toggle Functions ---
             function toggleMode() {
                 isMultiAgentMode = true;
@@ -4817,7 +4783,9 @@
 
 					// Route
 				    const { leadAgent, activeAgents } = selectLeadAgent(
-				        prompt);
+				        prompt,
+				        ['nouf', 'omar', 'layla', 'hakim']
+				    );
 				
 				    isMultiAgentMode = true;
 				
@@ -4989,6 +4957,47 @@
 			        weight: 5
 			    }
 			};
+
+			function selectLeadAgent(prompt, agents) {
+			    const lower = prompt.toLowerCase();
+			
+			    // Get only real active agents
+			    const active = personaData
+			        .filter(a => allowedAgents.includes(a.id) && a.isActive)
+			        .map(a => a.id);
+			
+			    let bestAgent = null;
+			    let bestScore = -1;
+			
+			    // Dynamic scoring based on prompt meaning
+			    active.forEach(agentId => {
+			        const capabilities = AgentCapabilities[agentId];
+			        let score = 0;
+			
+			        // Score by keyword relevance (dynamic)
+			        capabilities.domains.forEach(term => {
+			            if (lower.includes(term)) score += 3;   // strong match
+			        });
+			
+			        // Weight increases if agent is highly specialized
+			        score *= capabilities.weight;
+			
+			        // Record best agent
+			        if (score > bestScore) {
+			            bestScore = score;
+			            bestAgent = agentId;
+			        }
+			    });
+			
+			    // Fallback: if no keywords matched → pick highest-weight active agent
+			    if (!bestAgent) {
+			        bestAgent = active.sort((a,b) => AgentCapabilities[b].weight - AgentCapabilities[a].weight)[0];
+			    }
+			
+			    return { leadAgent: bestAgent, activeAgents: active };
+			}
+
+
 
 
             function openMeetingsModal(topicId, topicTitle) {
