@@ -4786,7 +4786,7 @@
 				    );
 				
 				    isMultiAgentMode = true;
-				
+					switchToAgentAndSendPrompt(prompt);
 				    activeAgents.forEach(aid => {
 				        sendMessageToAgent(prompt, aid, { silent: aid !== leadAgent });
 				    });
@@ -7520,6 +7520,7 @@ Keep it brief and executive-level.`;
 
 
 </body></html>
+
 
 
 
