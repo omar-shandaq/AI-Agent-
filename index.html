@@ -4778,24 +4778,10 @@
                 });
 				
 				newPrepareBtn.addEventListener('click', () => {
-				    const prompt = `I need help preparing for this meeting: "${title}". Provide strategic guidance, key considerations, risks, and what I should ask.`;
-				
-				    const { leadAgent, activeAgents } = selectLeadAgent(
-				        prompt,
-				        ['nouf', 'omar', 'layla', 'hakim']
-				    );
-				
-				    isMultiAgentMode = true;
-					switchToAgentAndSendPrompt(prompt);
-				    activeAgents.forEach(aid => {
-				        sendMessageToAgent(prompt, aid, 3, 1000, { silent: aid !== leadAgent });
-				    });
-				
-				    closeModal(document.getElementById('event-modal'));
+                    const prompt = `What preparations do I need for my event: "${title}"? Please consult and advise.`;
+                    switchToAgentAndSendPrompt(prompt, 'nouf');
 				});
 
-
-				
                 openModal(eventModal);
             }
 
@@ -7520,6 +7506,7 @@ Keep it brief and executive-level.`;
 
 
 </body></html>
+
 
 
 
