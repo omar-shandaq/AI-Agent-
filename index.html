@@ -3734,7 +3734,7 @@
             <button class="nav-button" data-target="tools-page"><i class="fas fa-cogs"></i> AI Tools</button>
             <button class="nav-button" data-target="news-page"><i class="fas fa-newspaper"></i> News</button>
             <button class="nav-button" data-target="templates-page"><i class="fas fa-file-alt"></i> Templates</button>
-            <button class="nav-button" data-target="mandate-page"><i class="fas fa-file-alt"></i> Templates</button>
+            <button class="nav-button" data-target="mandate-page"><i class="fas fa-th-large"></i> Mandate</button>
         </nav>
     </div>
 
@@ -4179,36 +4179,66 @@
                 <!-- Tool Card 1: Data Visualization -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fas fa-chart-bar"></i></div>
-                    <h3 class="tool-title">AI-Powered Data Visualization</h3>
+                    <h3 class="tool-title">Official Press Release Template</h3>
                     <p class="tool-description">Automatically generates insightful charts and dashboards from ministry data, highlighting key trends, anomalies, and performance metrics without manual setup.</p>
                     <button class="tool-action-btn" data-tool-action="visualize"><i class="fas fa-eye"></i> Explore Tool</button>
                 </div>
                 <!-- Tool Card 2: Predictive Analytics -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fas fa-brain"></i></div>
-                    <h3 class="tool-title">Predictive Policy Modeling</h3>
+                    <h3 class="tool-title">Internal Memo</h3>
                     <p class="tool-description">Simulates the potential impact of proposed policies on key indicators (e.g., employment, social welfare) using AI to forecast outcomes and risks.</p>
                     <button class="tool-action-btn" data-tool-action="predict"><i class="fas fa-cogs"></i> Run Simulation</button>
                 </div>
                 <!-- Tool Card 3: Report Generation -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fas fa-file-invoice"></i></div>
-                    <h3 class="tool-title">Automated Report Synthesis</h3>
+                    <h3 class="tool-title">Interministerial Request</h3>
                     <p class="tool-description">Condenses lengthy reports, research papers, and meeting transcripts into concise executive summaries, extracting key findings and action items.</p>
                     <button class="tool-action-btn" data-tool-action="summarize"><i class="fas fa-align-left"></i> Generate Summary</button>
                 </div>
                  <!-- Tool Card 4: Sentiment Analysis -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fas fa-comments"></i></div>
-                    <h3 class="tool-title">Public Sentiment Analysis</h3>
-                    <p class="tool-description">Analyzes social media, news, and public feedback channels to gauge sentiment towards HRSD initiatives and identify emerging public concerns.</p>
+                    <h3 class="tool-title">Speech Template</h3>
+                    <p class="tool-description">Act as a top-tier speechwriter specializing in impactful, ministry-related communication. Your goal is to draft a speech that [state event type, e.g., weekly sermon, youth group meeting, community outreach presentation].
+                        **Audience Details:**
+                        *   **Who:** [Describe your audience, e.g., mixed-age congregation, church leadership, youth]
+                        *   **Size:** [Insert number or range, e.g., 50 people, large crowd]
+                        *   **Their likely concerns/emotions:** [e.g., concerns about current events, feeling inspired after a recent event]
+
+                        **Speech Specifications:**
+                        *   **Goal:** The primary objective is to [e.g., inspire action on a new initiative, provide comfort during a difficult time, educate on a biblical passage].
+                        *   **Key Message/Theme:** The single most important takeaway is "[Insert your core message or theme]".
+                        *   **Tone:** The speech should be [e.g., empathetic and professional, inspirational and encouraging, serious yet hopeful, slightly humorous but sincere].
+                        *   **Length:** [Specify length, e.g., 10 minutes, 1500 words, short 5-minute talk].
+                        *   **Style Notes:** [e.g., Use the ESV Bible translation. Incorporate one personal anecdote. Avoid overly complex theological jargon].
+
+                        **Content Requirements:**
+                        *   **Introduction:** Start with a strong hook, maybe a quote or a short anecdote, to grab attention.
+                        *   **Main Points:** Structure the speech with 3 key points, using bullet points in your response for clarity.
+                            1.  [Insert Point 1 idea]
+                            2.  [Insert Point 2 idea]
+                            3.  [Insert Point 3 idea]
+                        *   **Evidence/Examples:** Where possible, include relevant biblical references or real-world examples to support each point.
+                        *   **Conclusion:** End with a powerful closing statement and a clear call to action.
+
+                        Please provide a full, structured draft of the speech based on the details above.
+                        </p>
                     <button class="tool-action-btn" data-tool-action="sentiment"><i class="fas fa-search"></i> View Sentiment</button>
                 </div>
                  <!-- Tool Card 5: Smart Scheduling -->
                  <div class="tool-card">
                     <div class="tool-icon"><i class="fas fa-calendar-check"></i></div>
-                    <h3 class="tool-title">Intelligent Meeting Scheduler</h3>
-                    <p class="tool-description">Optimizes scheduling for complex, multi-attendee high-level meetings by considering priorities, availability, and optimal time slots using AI.</p>
+                    <h3 class="tool-title">Diplomatic Communication Template</h3>
+                    <p class="tool-description">"Act as a seasoned diplomat and communications specialist for a Ministry of Foreign Affairs.
+Objective: [Clearly state the goal, e.g., "Draft a press release," "Compose a formal letter," "Create talking points for a meeting."]
+Context: [Provide all relevant background information, key policy points, involved countries/entities, and the specific situation.]
+Audience: [Specify the target audience, e.g., "The general public," "Foreign dignitaries," "Internal staff," "A specific ambassador."]
+Tone/Style: [Define the required tone, e.g., "Formal yet engaging," "Confidential and objective," "Firm but respectful," "Neutral and informative."]
+Key Messages: [List 2-3 mandatory points that must be included.]
+Constraints: [Mention any length limits, specific formatting requirements, or details to omit.]
+Desired Output: [e.g., "A final draft ready for review."]</p>
                     <button class="tool-action-btn" data-tool-action="schedule"><i class="fas fa-calendar-plus"></i> Schedule Meeting</button>
                 </div>
             </div> 
@@ -4921,7 +4951,7 @@
 				
 				newPrepareBtn.addEventListener('click', () => {
                     const prompt = `What preparations do I need for my event: "${title}"? Please consult and advise.`;
-                    switchToAgentAndSendPrompt(prompt);
+                    switchToAgentAndSendPrompt(prompt, 'nouf');
 
 					// Route
 				    const { leadAgent, activeAgents } = selectLeadAgent(
