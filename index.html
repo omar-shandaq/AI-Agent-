@@ -4939,58 +4939,64 @@
 
                 parentEl.appendChild(columnsWrapper);
             }
-				
-			function selectLeadAgent(prompt, allowedAgents) {
+			const AgentCapabilities = {
+			    hakim: {
+			        domains: ["leadership", "executive", "summary", "overview", "decision"],
+			        weight: 2
+			    },
+			    layla: {
+			        domains: ["data", "chart", "analysis", "metrics", "statistics", "trend", "report"],
+			        weight: 4
+			    },
+			    omar: {
+			        domains: ["schedule", "meeting", "coordinate", "arrange", "operations", "workflow"],
+			        weight: 4
+			    },
+			    nouf: {
+			        domains: ["preparation", "consult", "strategy", "risk", "insight", "guidance", "deep analysis"],
+			        weight: 5
+			    }
+			};
+
+			function selectLeadAgent(prompt, allowedAgents = ['hakim','layla','omar','nouf']) {
 			    const lower = prompt.toLowerCase();
 			
-			    // Filter to only active agents you passed in
+			    // Get only real active agents
 			    const active = personaData
 			        .filter(a => allowedAgents.includes(a.id) && a.isActive)
 			        .map(a => a.id);
 			
-			    // PRIORITY ROUTING LOGIC
-			    // 1. Consulting / preparation / strategy → Nouf
-			    if (lower.includes("prepare") ||
-			        lower.includes("preparation") ||
-			        lower.includes("consult") ||
-			        lower.includes("advise") ||
-			        lower.includes("guidance") ||
-			        lower.includes("analysis") ||
-			        lower.includes("insight")) {
-			        if (active.includes("nouf")) {
-			            return { leadAgent: "nouf", activeAgents: active };
+			    let bestAgent = null;
+			    let bestScore = -1;
+			
+			    // Dynamic scoring based on prompt meaning
+			    active.forEach(agentId => {
+			        const capabilities = AgentCapabilities[agentId];
+			        let score = 0;
+			
+			        // Score by keyword relevance (dynamic)
+			        capabilities.domains.forEach(term => {
+			            if (lower.includes(term)) score += 3;   // strong match
+			        });
+			
+			        // Weight increases if agent is highly specialized
+			        score *= capabilities.weight;
+			
+			        // Record best agent
+			        if (score > bestScore) {
+			            bestScore = score;
+			            bestAgent = agentId;
 			        }
+			    });
+			
+			    // Fallback: if no keywords matched → pick highest-weight active agent
+			    if (!bestAgent) {
+			        bestAgent = active.sort((a,b) => AgentCapabilities[b].weight - AgentCapabilities[a].weight)[0];
 			    }
 			
-			    // 2. Operations / scheduling → Omar
-			    if (lower.includes("schedule") ||
-			        lower.includes("meeting") && !lower.includes("prepare") ||
-			        lower.includes("coordinate") ||
-			        lower.includes("arrange")) {
-			        if (active.includes("omar")) {
-			            return { leadAgent: "omar", activeAgents: active };
-			        }
-			    }
-			
-			    // 3. Data / charts → Layla
-			    if (lower.includes("chart") ||
-			        lower.includes("data") ||
-			        lower.includes("graph") ||
-			        lower.includes("statistics") ||
-			        lower.includes("report")) {
-			        if (active.includes("layla")) {
-			            return { leadAgent: "layla", activeAgents: active };
-			        }
-			    }
-			
-			    // 4. Fallback → Hakim (executive reasoning)
-			    if (active.includes("hakim")) {
-			        return { leadAgent: "hakim", activeAgents: active };
-			    }
-			
-			    // Safety fallback (should never happen)
-			    return { leadAgent: active[0], activeAgents: active };
+			    return { leadAgent: bestAgent, activeAgents: active };
 			}
+
 
 
 
@@ -7538,6 +7544,7 @@ Keep it brief and executive-level.`;
 
 
 </body></html>
+
 
 
 
