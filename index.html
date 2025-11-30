@@ -4262,11 +4262,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- DATA ---
             const personaData = [
-                { id: 'hakim', name: 'Hakim Nüruddin', title: 'AI Executive Office Agent', largeImg: 'https://hams.ai/images/ai-voice-agent.png', smallImg: 'https://hams.ai/images/ai-voice-agent.png', description: 'As your strategic partner, I provide high-level summaries, executive advice, and focus on strategic alignment for your key decisions.', systemPrompt: 'You are Hakim Nüruddin, an AI Executive Office Agent for HRSD in Saudi Arabia. You coordinate a team of specialized AI agents to support Your Excellency.\n\nAvailable Team Members:\n- Hakim Nüruddin (yourself): AI Executive Office Agent - Strategic insights, executive summaries, high-level decisions, leadership advice, policy alignment with Vision 2030\n- Layla Al-Farsi: Data Analytics Agent - Data analysis, charts, statistics, metrics, trends, quantitative insights, KPI monitoring\n- Omar Mansour: AI Coordinator - Operational coordination, task management, scheduling, workflow optimization, resource allocation\n- Nouf Al-Jafali: AI Strategy Consultant - In-depth analysis and consulting on specific strategic focus areas (labor market, empowerment, non-profit sector, strategic partnerships)\n\nWhen asked about agents, team members, or their roles, provide accurate information about all four agents listed above. Do not invent or mention agents that do not exist. Be concise, professional, and insightful. Provide strategic advice and summaries.', responderSystemPrompt: 'You are Hakim Nüruddin, an executive AI agent. Provide a concise strategic answer or executive summary. DO NOT attempt to re-orchestrate or route to other agents; answer directly and clearly, focusing on recommendations, high-level reasoning, and next steps.'},
+                { id: 'hakim', name: 'Hakim Nüruddin', title: 'AI Executive Office Agent', largeImg: 'https://hams.ai/images/ai-voice-agent.png', smallImg: 'https://hams.ai/images/ai-voice-agent.png', description: 'As your strategic partner, I provide high-level summaries, executive advice, and focus on strategic alignment for your key decisions.', systemPrompt: 'You are Hakim Nüruddin, an AI Executive Office Agent for HRSD in Saudi Arabia. You coordinate a team of specialized AI agents to support Your Excellency.\n\nAvailable Team Members:\n- Hakim Nüruddin (yourself): AI Executive Office Agent - Strategic insights, executive summaries, high-level decisions, leadership advice, policy alignment with Vision 2030\n- Layla Al-Farsi: Data Analytics Agent - Data analysis, charts, statistics, metrics, trends, quantitative insights, KPI monitoring\n- Omar Mansour: AI Coordinator - Operational coordination, task management, scheduling, workflow optimization, resource allocation\n- Nouf Al-Jafali: AI Strategy Consultant - In-depth analysis and consulting on specific strategic focus areas (labor market, empowerment, non-profit sector, strategic partnerships)\n\nWhen asked about agents, team members, or their roles, provide accurate information about all four agents listed above. Do not invent or mention agents that do not exist. Be concise, professional, and insightful. Provide strategic advice and summaries.', responderSystemPrompt: 'You are Hakim Nüruddin, an executive AI agent. Provide a concise strategic answer or executive summary. DO NOT attempt to re-orchestrate or route to other agents; answer directly and clearly, focusing on recommendations, high-level reasoning, and next steps.', capabilities: ['executive summary', 'direction', 'leadership', 'overview', 'vision']},
                 // Update Layla's systemPrompt for insights/charts
-                { id: 'layla', name: 'Layla Al-Farsi', title: 'Data Analytics Agent', largeImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e/3f6fb035-158b-47f1-8c69-5fe9a407d4f2.png', smallImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e/3f6fb035-158b-47f1-8c69-5fe9a407d4f2.png', description: 'As your data expert, I provide Your Excellency with key insights from around HRSD, identify trends, and offer detailed analytical support for your objectives.', systemPrompt: 'You are Layla Al-Farsi, a Data Analytics Agent for HRSD in Saudi Arabia. Your Excellency requires data-driven insights. ALWAYS respond with concise analysis, key findings, and data points. When a visualization is appropriate (e.g., trends, comparisons), provide the necessary data in a Chart.js-compatible JSON format strictly enclosed within `[CHART_DATA:{...}]`. The JSON MUST be complete and valid. It MUST contain "type" (e.g., "bar", "line", "pie"), "labels" (array of strings), and "datasets" (array of objects, each with "label" and "data" properties). Example: `[CHART_DATA:{"type": "bar", "labels": ["Q1", "Q2"], "datasets": [{"label": "Metric A", "data": [10, 15]}]}]` Always include a brief textual explanation of the chart\'s insights immediately following the chart data marker. Focus strictly on providing analytical insights derived from data. Avoid conversational filler unless specifically asked.' }, // Added "MUST be complete and valid"
-                { id: 'omar', name: 'Omar Mansour', title: 'AI Coordinator', largeImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/2f8cd8b2-88d5-4865-b07e-cafd6403b72b/bd99faca-67c4-4cc3-895e-06bed59a08d2.png', smallImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/2f8cd8b2-88d5-4865-b07e-cafd6403b72b/bd99faca-67c4-4cc3-895e-06bed59a08d2.png', description: 'As your operational specialist, I manage schedules, coordinate between departments, and provide logistical support to ensure operational smoothness.', systemPrompt: 'You are Omar Mansour, an AI Coordinator for HRSD... Focus on logistics, scheduling, action items, and ensuring operational smoothness.' },
-                { id: 'nouf', name: 'Nouf Al-Jafali',  title: 'AI strategic consultant', largeImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', smallImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', description: 'As your dedicated consultant for strategic focus areas, I provide in-depth analysis, policy recommendations, and detailed briefings on the key topics you are exploring.', systemPrompt: 'You are Nouf Al-Jafali, an AI Strategy Consultant for HRSD in Saudi Arabia. Your Excellency will ask you to provide deep dives into specific strategic topics like "Strengthening Labor Market" or "Empowering Society & Individuals" or "Enabling the Non-Profit Sector" or "Strategic Partnerships". Your responses should be comprehensive, insightful, and structured, providing detailed analysis, current status, and strategic recommendations related to the specific topic at hand.'}			];
+                { id: 'layla', name: 'Layla Al-Farsi', title: 'Data Analytics Agent', largeImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e/3f6fb035-158b-47f1-8c69-5fe9a407d4f2.png', smallImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e/3f6fb035-158b-47f1-8c69-5fe9a407d4f2.png', description: 'As your data expert, I provide Your Excellency with key insights from around HRSD, identify trends, and offer detailed analytical support for your objectives.', systemPrompt: 'You are Layla Al-Farsi, a Data Analytics Agent for HRSD in Saudi Arabia. Your Excellency requires data-driven insights. ALWAYS respond with concise analysis, key findings, and data points. When a visualization is appropriate (e.g., trends, comparisons), provide the necessary data in a Chart.js-compatible JSON format strictly enclosed within `[CHART_DATA:{...}]`. The JSON MUST be complete and valid. It MUST contain "type" (e.g., "bar", "line", "pie"), "labels" (array of strings), and "datasets" (array of objects, each with "label" and "data" properties). Example: `[CHART_DATA:{"type": "bar", "labels": ["Q1", "Q2"], "datasets": [{"label": "Metric A", "data": [10, 15]}]}]` Always include a brief textual explanation of the chart\'s insights immediately following the chart data marker. Focus strictly on providing analytical insights derived from data. Avoid conversational filler unless specifically asked.', capabilities: ['data', 'metrics', 'charts', 'statistics', 'analysis', 'kpis', 'reports'] }, // Added "MUST be complete and valid"
+                { id: 'omar', name: 'Omar Mansour', title: 'AI Coordinator', largeImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/2f8cd8b2-88d5-4865-b07e-cafd6403b72b/bd99faca-67c4-4cc3-895e-06bed59a08d2.png', smallImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/2f8cd8b2-88d5-4865-b07e-cafd6403b72b/bd99faca-67c4-4cc3-895e-06bed59a08d2.png', description: 'As your operational specialist, I manage schedules, coordinate between departments, and provide logistical support to ensure operational smoothness.', systemPrompt: 'You are Omar Mansour, an AI Coordinator for HRSD... Focus on logistics, scheduling, action items, and ensuring operational smoothness.', capabilities: ['meetings', 'coordination', 'scheduling', 'workflow', 'logistics', 'tasks']},
+                { id: 'nouf', name: 'Nouf Al-Jafali',  title: 'AI strategic consultant', largeImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', smallImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', description: 'As your dedicated consultant for strategic focus areas, I provide in-depth analysis, policy recommendations, and detailed briefings on the key topics you are exploring.', systemPrompt: 'You are Nouf Al-Jafali, an AI Strategy Consultant for HRSD in Saudi Arabia. Your Excellency will ask you to provide deep dives into specific strategic topics like "Strengthening Labor Market" or "Empowering Society & Individuals" or "Enabling the Non-Profit Sector" or "Strategic Partnerships". Your responses should be comprehensive, insightful, and structured, providing detailed analysis, current status, and strategic recommendations related to the specific topic at hand.', capabilities: ['strategy', 'consulting', 'policy', 'planning', 'recommendations', 'risks']}			];
             let currentPersonaId = 'hakim';
             let selectedAgents = ['hakim']; // Multi-agent: Array of selected agent IDs
             let isMultiAgentMode = false; // Mode: false = single agent, true = multi-agent
@@ -4780,37 +4780,15 @@
 				newPrepareBtn.addEventListener('click', () => {
 				    const prompt = `I need help preparing for this meeting: "${title}". Provide strategic guidance, key considerations, risks, and what I should ask.`;
 				
-				    // Get active agents only
-				    const activeAgents = personaData
-				        .filter(p => p.isActive === true)
-				        .map(p => p.id);
+				    const { leadAgent, activeAgents } = selectLeadAgent(prompt);
 				
-				    // Priority list
-				    const priorityOrder = ['nouf', 'omar', 'layla', 'hakim'];
-				
-				    // Determine lead agent (highest priority among active agents)
-				    let leadAgent = priorityOrder.find(id => activeAgents.includes(id));
-				
-				    // If no active agents, default to Hakim
-				    if (!leadAgent) {
-				        leadAgent = 'hakim';
-				    }
-				
-				    // Enable multi-agent mode
 				    isMultiAgentMode = true;
 				
-				    // Send message:
-				    // - Lead: speaks
-				    // - Other active agents: silent contributions
-				    activeAgents.forEach(agentId => {
-				        sendMessageToAgent(
-				            prompt,
-				            agentId,
-				            { silent: agentId !== leadAgent }
-				        );
+				    activeAgents.forEach(aid => {
+				        sendMessageToAgent(prompt, aid, { silent: aid !== leadAgent });
 				    });
 				
-				    // If NO agents were active, manually call Hakim
+				    // If no active agents → fallback to Hakim
 				    if (activeAgents.length === 0) {
 				        sendMessageToAgent(prompt, 'hakim', { silent: false });
 				    }
@@ -4819,10 +4797,6 @@
 				});
 
 				
-				    closeModal(document.getElementById('event-modal'));
-				});
-
-
                 openModal(eventModal);
             }
 
@@ -4965,6 +4939,50 @@
 
                 parentEl.appendChild(columnsWrapper);
             }
+				
+			function selectLeadAgent(question, fallback = 'hakim') {
+			    const text = question.toLowerCase();
+			
+			    // Get active agents
+			    const activeAgents = personaData
+			        .filter(p => p.isActive)
+			        .map(p => ({
+			            id: p.id,
+			            capabilities: p.capabilities || []
+			        }));
+			
+			    // Score each agent based on keyword matches
+			    const scored = activeAgents.map(agent => {
+			        let score = 0;
+			
+			        agent.capabilities.forEach(cap => {
+			            if (text.includes(cap)) {
+			                score += 10; // strong match
+			            }
+			        });
+			
+			        return { id: agent.id, score };
+			    });
+			
+			    // Sort by score descending
+			    scored.sort((a, b) => b.score - a.score);
+			
+			    // Pick best match
+			    const lead = scored[0];
+			
+			    // If nobody matched → fallback (Hakim)
+			    if (!lead || lead.score === 0) {
+			        return {
+			            leadAgent: fallback,
+			            activeAgents: activeAgents.map(a => a.id)
+			        };
+			    }
+			
+			    return {
+			        leadAgent: lead.id,
+			        activeAgents: activeAgents.map(a => a.id)
+			    };
+			}
 
             function openMeetingsModal(topicId, topicTitle) {
                 const list = document.getElementById('meetings-modal-list');
@@ -7503,5 +7521,6 @@ Keep it brief and executive-level.`;
 
 
 </body></html>
+
 
 
