@@ -3734,6 +3734,7 @@
             <button class="nav-button" data-target="tools-page"><i class="fas fa-cogs"></i> AI Tools</button>
             <button class="nav-button" data-target="news-page"><i class="fas fa-newspaper"></i> News</button>
             <button class="nav-button" data-target="templates-page"><i class="fas fa-file-alt"></i> Templates</button>
+            <button class="nav-button" data-target="mandate-page"><i class="fas fa-file-alt"></i> Templates</button>
         </nav>
     </div>
 
@@ -4173,7 +4174,148 @@
                 </div>
             </div>
         </div>
-        <div id="templates-page" class="page-content"> <div class="placeholder-page" style="width: 100%;"> <h2><i class="fas fa-file-alt"></i> Templates</h2> <p>Access a library of pre-built templates for various documents, including meeting minutes, project proposals, and executive summaries, to streamline your workflow.</p> </div> </div>
+        <div id="templates-page" class="page-content"> 
+            <div class="tools-container">
+                <!-- Tool Card 1: Data Visualization -->
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3 class="tool-title">AI-Powered Data Visualization</h3>
+                    <p class="tool-description">Automatically generates insightful charts and dashboards from ministry data, highlighting key trends, anomalies, and performance metrics without manual setup.</p>
+                    <button class="tool-action-btn" data-tool-action="visualize"><i class="fas fa-eye"></i> Explore Tool</button>
+                </div>
+                <!-- Tool Card 2: Predictive Analytics -->
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-brain"></i></div>
+                    <h3 class="tool-title">Predictive Policy Modeling</h3>
+                    <p class="tool-description">Simulates the potential impact of proposed policies on key indicators (e.g., employment, social welfare) using AI to forecast outcomes and risks.</p>
+                    <button class="tool-action-btn" data-tool-action="predict"><i class="fas fa-cogs"></i> Run Simulation</button>
+                </div>
+                <!-- Tool Card 3: Report Generation -->
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-file-invoice"></i></div>
+                    <h3 class="tool-title">Automated Report Synthesis</h3>
+                    <p class="tool-description">Condenses lengthy reports, research papers, and meeting transcripts into concise executive summaries, extracting key findings and action items.</p>
+                    <button class="tool-action-btn" data-tool-action="summarize"><i class="fas fa-align-left"></i> Generate Summary</button>
+                </div>
+                 <!-- Tool Card 4: Sentiment Analysis -->
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-comments"></i></div>
+                    <h3 class="tool-title">Public Sentiment Analysis</h3>
+                    <p class="tool-description">Analyzes social media, news, and public feedback channels to gauge sentiment towards HRSD initiatives and identify emerging public concerns.</p>
+                    <button class="tool-action-btn" data-tool-action="sentiment"><i class="fas fa-search"></i> View Sentiment</button>
+                </div>
+                 <!-- Tool Card 5: Smart Scheduling -->
+                 <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3 class="tool-title">Intelligent Meeting Scheduler</h3>
+                    <p class="tool-description">Optimizes scheduling for complex, multi-attendee high-level meetings by considering priorities, availability, and optimal time slots using AI.</p>
+                    <button class="tool-action-btn" data-tool-action="schedule"><i class="fas fa-calendar-plus"></i> Schedule Meeting</button>
+                </div>
+            </div> 
+        </div>
+        
+        <!-- Mandate -->
+        <div id="mandate-page" class="page-content">
+            <div class="topics-container" style="width: 100%;">
+                <!-- Topic Card 1 -->
+                <div class="topic-card" data-topic-id="labor-market">
+                    <div class="topic-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Strengthening Labor Market</h3>
+                        <p class="topic-description">Developing policies to create an attractive, inclusive, and safe labor market that empowers Saudi nationals and aligns with global standards.</p>
+                    </div>
+                    <div class="topic-kpis">
+                        <div class="kpi-item">
+                            <span class="kpi-value">4</span>
+                            <span class="kpi-label">Strategic KPIs</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-value">7</span>
+                            <span class="kpi-label">Related Initiatives</span>
+                        </div>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+                <!-- Topic Card 2 -->
+                <div class="topic-card" data-topic-id="empowerment">
+                     <div class="topic-icon"><i class="fas fa-users"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Empowering Society &amp; Individuals</h3>
+                        <p class="topic-description">Enhancing social development, empowering individuals and communities, and promoting self-reliance through targeted programs and support.</p>
+                    </div>
+                     <div class="topic-kpis">
+                        <div class="kpi-item">
+                            <span class="kpi-value">5</span>
+                            <span class="kpi-label">Strategic KPIs</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-value">9</span>
+                            <span class="kpi-label">Related Initiatives</span>
+                        </div>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+                <!-- Topic Card 3 -->
+                <div class="topic-card" data-topic-id="non-profit">
+                     <div class="topic-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Enabling the Non-Profit Sector</h3>
+                        <p class="topic-description">Fostering the growth and impact of the non-profit sector to expand its contribution to the economy and social development.</p>
+                    </div>
+                     <div class="topic-kpis">
+                        <div class="kpi-item">
+                            <span class="kpi-value">3</span>
+                            <span class="kpi-label">Strategic KPIs</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-value">4</span>
+                            <span class="kpi-label">Related Initiatives</span>
+                        </div>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+                <!-- Topic Card 4 -->
+                <div class="topic-card" data-topic-id="strategic-partnerships">
+                     <div class="topic-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Strategic Partnerships</h3>
+                        <p class="topic-description">Building effective and sustainable partnerships with public, private, and non-profit entities to achieve shared national goals.</p>
+                    </div>
+                     <div class="topic-kpis">
+                        <div class="kpi-item">
+                            <span class="kpi-value">2</span>
+                            <span class="kpi-label">Strategic KPIs</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-value">6</span>
+                            <span class="kpi-label">Related Initiatives</span>
+                        </div>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
     </div>
 
     <!-- Modals -->
@@ -7011,6 +7153,10 @@ Keep it brief and executive-level.`;
             if (chatInput) { chatInput.addEventListener('keydown', (event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); handleSendMessage(); } }); }
             // Topic card actions
             document.querySelectorAll('.topic-action-btn').forEach(button => { button.addEventListener('click', () => { const action = button.dataset.action; const card = button.closest('.topic-card'); if (!card) return; const topicId = card.dataset.topicId; const topicTitleEl = card.querySelector('.topic-title'); if (!topicTitleEl) return; const topicTitle = topicTitleEl.textContent; if (action === 'meetings') { openMeetingsModal(topicId, topicTitle); } else if (action === 'deeper') { const prompt = `Please provide a detailed briefing on the focus area: "${topicTitle}". Include key details, current status, and strategic recommendations.`; switchToAgentAndSendPrompt(prompt, 'nouf');} else if (action === 'references') { const prompt = `Please pull up the latest references and documents from my team regarding "${topicTitle}".`; takeActionFromTopic(prompt); } else if (action === 'news') { viewRelatedNews(topicId, topicTitle); } }); });
+            // Mandate card actions
+            document.querySelectorAll('.topic-action-btn').forEach(button => { button.addEventListener('click', () => { const action = button.dataset.action; const card = button.closest('.topic-card'); if (!card) return; const topicId = card.dataset.topicId; const topicTitleEl = card.querySelector('.topic-title'); if (!topicTitleEl) return; const topicTitle = topicTitleEl.textContent; if (action === 'meetings') { openMeetingsModal(topicId, topicTitle); } else if (action === 'deeper') { const prompt = `Please provide a detailed briefing on the focus area: "${topicTitle}". Include key details, current status, and strategic recommendations.`; switchToAgentAndSendPrompt(prompt, 'nouf');} else if (action === 'references') { const prompt = `Please pull up the latest references and documents from my team regarding "${topicTitle}".`; takeActionFromTopic(prompt); } else if (action === 'news') { viewRelatedNews(topicId, topicTitle); } }); });
+
+            
             // "Ask Agent" on text selection
              document.addEventListener('mouseup', (e) => { if (!askAgentBtn) return; const targetElement = e.target; if (targetElement.tagName === 'INPUT' || targetElement.tagName === 'TEXTAREA' || targetElement.closest('.modal') || targetElement.closest('#ask-agent-btn')) { askAgentBtn.style.display = 'none'; return; } setTimeout(() => { const text = window.getSelection().toString().trim(); if (text.length > 1) { selectedText = text; const rect = window.getSelection().getRangeAt(0).getBoundingClientRect(); askAgentBtn.style.left = `${rect.right + window.scrollX + 5}px`; askAgentBtn.style.top = `${rect.bottom + window.scrollY + 5}px`; askAgentBtn.style.display = 'block'; } else { askAgentBtn.style.display = 'none'; } }, 10); });
             document.addEventListener('mousedown', (e) => { if (askAgentBtn && e.target.id !== 'ask-agent-btn') { askAgentBtn.style.display = 'none'; } });
@@ -7542,7 +7688,6 @@ Keep it brief and executive-level.`;
 
 
 </body></html>
-
 
 
 
