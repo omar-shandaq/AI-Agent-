@@ -4444,8 +4444,6 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
             let isMultiAgentMode = false; // Mode: false = single agent, true = multi-agent
             let chatHistory = [];
             let selectedText = '';
-            let conversationLead = null;
-
             // Set "today" to the specified context date: Wednesday, Oct 22, 2025
 
             // --- DOM Elements ---
@@ -4954,7 +4952,6 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
 				newPrepareBtn.addEventListener('click', () => {
                     const prompt = `What preparations do I need for my event: "${title}"? Please consult and advise.`;
                     switchToAgentAndSendPrompt(prompt, 'nouf');
-
 
 					// Route
 				    const { leadAgent, activeAgents } = selectLeadAgent(
@@ -5465,59 +5462,20 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 if (!userMessage) return;
 
                 displayMessage('user', userMessage);
+                // Add user message to history *before* calling API
                 chatHistory.push({ role: 'user', parts: [{ text: userMessage }] });
                 chatInput.value = '';
-
-                // -------------------------------
-                // CONTINUATION REPLY LOGIC (YES / OK / PROCEED / CONTINUE)
-                // -------------------------------
-                const shortReply = userMessage.toLowerCase();
-                const continuationReplies = [
-                    "yes", "yep", "sure", "ok", "okay", "please", "proceed",
-                    "go ahead", "continue", "confirm"
-                ];
-
-                if (conversationLead && continuationReplies.includes(shortReply)) {
-
-                    // Continue with the same agent who previously asked a question
-                    const leadAgent = conversationLead;
-                    const activeAgents = getSelectedAgentsInfo().map(a => a.id);
-
-                    showTypingIndicator();
-
-                    // Only the conversation lead should speak; others silent
-                    for (const aid of activeAgents) {
-                        await sendMessageToAgent(userMessage, aid, { silent: aid !== leadAgent });
-                    }
-
-                    return; // IMPORTANT — do NOT re-route
-                }
-
-                // -------------------------------
-                // NORMAL MESSAGE FLOW  
-                // (Since it's not a continuation reply)
-                // -------------------------------
-
-                // Reset previous lead — you are now asking a new question
-                conversationLead = null;
-
+                
                 if (isMultiAgentMode) {
-
-                    // Multi-agent routing (Hakim orchestrates)
+                    // Multi-agent mode: Hakim orchestrates and routes to appropriate agents
                     await orchestrateMultiAgentResponse(userMessage);
-
                 } else {
-
-                    // Single agent mode
-                    const selectedAgent = selectedAgents.length > 0
-                        ? selectedAgents[0]
-                        : currentPersonaId;
-
+                    // Single agent mode: send to the selected agent (use selectedAgents[0] instead of currentPersonaId)
+                    const selectedAgent = selectedAgents.length > 0 ? selectedAgents[0] : currentPersonaId;
                     showTypingIndicator();
                     await sendMessageToAgent(userMessage, selectedAgent);
                 }
             }
-
             
             // Smart agent orchestration: Hakim analyzes prompt and routes to appropriate agents
             // Replace existing orchestrateMultiAgentResponse with this improved version
@@ -5742,9 +5700,6 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                     const agentResponseText = candidate?.content?.parts?.[0]?.text;
 
                 if (agentResponseText) {
-                    if (agentResponseText.trim().endsWith("?")) {
-                        conversationLead = agentId;   // This agent becomes the lead for follow-ups
-                    }
                     displayMessage('agent', agentResponseText, agentId);
                     // Add successful AI response to history
                     chatHistory.push({ role: 'model', parts: [{ text: agentResponseText }] });
@@ -7755,7 +7710,273 @@ Keep it brief and executive-level.`;
             })();
 
         });
-    </script>
+    
+
+/* === BEGIN PATCH: Conversation ownership + improved routing & agent handlers === */
+
+// Conversation ownership lock: which agent currently owns follow-ups (e.g., after agent asked a question)
+let conversationLead = null;
+
+/**
+ * selectLeadAgent(prompt)
+ * Reusable capability-driven lead selector.
+ */
+function selectLeadAgent(prompt, candidates = ['nouf','omar','layla','hakim']) {
+    const activeAgents = (typeof getSelectedAgentsInfo === 'function')
+        ? getSelectedAgentsInfo().map(a => a.id)
+        : (typeof selectedAgents !== 'undefined' ? selectedAgents.slice() : []);
+
+    // Filter candidates to active ones (order preserved)
+    const available = candidates.filter(id => activeAgents.includes(id));
+
+    const p = (prompt || '').toLowerCase();
+
+    const capabilityKeywords = {
+        nouf: ['consult', 'prepare', 'preparations', 'advice', 'advise', 'strategy', 'briefing', 'risk', 'analysis', 'prepare'],
+        omar: ['schedule', 'meeting', 'coordinate', 'logistic', 'arrange', 'calendar', 'task', 'coordinate'],
+        layla: ['data', 'chart', 'charts', 'statistics', 'analysis', 'metrics', 'visualization', 'visual'],
+        hakim: ['overview', 'summary', 'strategy', 'executive', 'brief']
+    };
+
+    const scores = {};
+    for (const id of available) scores[id] = 0;
+
+    for (const id of available) {
+        const keywords = capabilityKeywords[id] || [];
+        for (const kw of keywords) {
+            if (p.includes(kw)) scores[id] += 10;
+        }
+    }
+
+    if (Object.values(scores).every(s => s === 0)) {
+        for (const id of ['nouf','omar','layla','hakim']) {
+            if (available.includes(id)) {
+                return { leadAgent: id, activeAgents: available };
+            }
+        }
+    }
+
+    let leadAgent = available[0];
+    let bestScore = -1;
+    for (const id of available) {
+        if (scores[id] > bestScore) {
+            bestScore = scores[id];
+            leadAgent = id;
+        }
+    }
+
+    return { leadAgent, activeAgents: available };
+}
+
+/**
+ * Overridden handleSendMessage()
+ * Intercepts continuation replies (yes/ok/continue) and routes them to conversationLead.
+ * Replaces previous handler behavior by being declared later in the file (overrides earlier definitions).
+ */
+async function handleSendMessage() {
+    if (!chatInput) return;
+    const userMessage = chatInput.value.trim();
+    if (!userMessage) return;
+
+    // Continuation intercept must run first
+    const shortReply = userMessage.toLowerCase();
+    const continuationReplies = [
+        "yes","yep","sure","ok","okay","please","proceed","go ahead","continue","confirm","please do","please proceed"
+    ];
+
+    if (conversationLead && continuationReplies.includes(shortReply)) {
+        // Continue with the same agent who previously asked a question
+        displayMessage('user', userMessage);
+        chatHistory.push({ role: 'user', parts: [{ text: userMessage }] });
+        chatInput.value = '';
+
+        const leadAgent = conversationLead;
+        const activeAgents = (typeof getSelectedAgentsInfo === 'function')
+            ? getSelectedAgentsInfo().map(a => a.id)
+            : (typeof selectedAgents !== 'undefined' ? selectedAgents.slice() : []);
+
+        showTypingIndicator();
+
+        for (const aid of activeAgents) {
+            // ensure ordering; silent flag for non-lead agents
+            await sendMessageToAgent(userMessage, aid, { silent: aid !== leadAgent });
+        }
+
+        return; // do not run normal routing
+    }
+
+    // Normal flow
+    displayMessage('user', userMessage);
+    chatHistory.push({ role: 'user', parts: [{ text: userMessage }] });
+    chatInput.value = '';
+
+    // Reset previous lead for a fresh question
+    conversationLead = null;
+
+    if (isMultiAgentMode) {
+        showTypingIndicator();
+        await orchestrateMultiAgentResponse(userMessage);
+    } else {
+        const selectedAgent = (typeof selectedAgents !== 'undefined' && selectedAgents.length > 0)
+            ? selectedAgents[0]
+            : currentPersonaId;
+        showTypingIndicator();
+        await sendMessageToAgent(userMessage, selectedAgent, { silent: false });
+    }
+}
+
+/**
+ * Overridden sendMessageToAgent - modernized and safe
+ * Keeps your existing API key + url pattern; adjusts options argument handling.
+ */
+async function sendMessageToAgent(message, agentId, options = {}) {
+    const { silent = false, retries = 3, delay = 1000 } = options || {};
+
+    // Use API key that was in the file; if you want to change it centrally, update here.
+    const apiKey = "AIzaSyDRtLqR7wHRu8Y1pQm4ge8_knbzlm_RHnc";
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+    const persona = (typeof personaData !== 'undefined') ? personaData.find(p => p.id === agentId) : null;
+    const systemPromptText = persona ? persona.systemPrompt : 'You are a helpful assistant.';
+
+    const payload = {
+        contents: chatHistory,
+        systemInstruction: {
+            parts: [{ text: `${systemPromptText} Your user is a high-level executive ("Your Excellency"). The current date and time is ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Riyadh' })}.` }]
+        },
+        generationConfig: { maxOutputTokens: 8192 },
+        safetySettings: [
+            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' }
+        ]
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        removeTypingIndicator();
+
+        if (!response.ok) {
+            if ((response.status === 429 || response.status >= 500) && retries > 0) {
+                await new Promise(r => setTimeout(r, delay));
+                return sendMessageToAgent(message, agentId, { silent, retries: retries - 1, delay: delay * 2 });
+            }
+            // On non-retryable errors show a bubble unless silent
+            if (!silent) {
+                displayMessage('agent', `I'm experiencing connectivity issues (${response.status}).`, agentId);
+            } else {
+                console.warn(`Silent-mode API error for ${agentId}: ${response.status}`);
+            }
+            return;
+        }
+
+        const result = await response.json();
+        const candidate = result.candidates?.[0];
+        const agentResponseText = candidate?.content?.parts?.[0]?.text;
+
+        if (agentResponseText) {
+
+            // if agent asked the user a question, lock conversation lead
+            if (agentResponseText.trim().endsWith("?")) {
+                conversationLead = agentId;
+            }
+
+            if (!silent) {
+                displayMessage('agent', agentResponseText, agentId);
+            } else {
+                // silent: do not display, but keep history for context
+                console.log(`Agent ${agentId} returned (silent):`, agentResponseText.substring(0,120));
+            }
+
+            // push to history
+            chatHistory.push({ role: 'model', parts: [{ text: agentResponseText }] });
+
+        } else {
+            // handle empty or blocked responses
+            if (isMultiAgentMode && silent) {
+                console.log(`Agent ${agentId} returned empty response in multi-agent silent mode - skipping`);
+                return;
+            }
+
+            let errorText = "I apologize, but I couldn't process that request fully. Please try rephrasing.";
+            if (candidate && candidate.finishReason && candidate.finishReason !== 'STOP') {
+                errorText = `I'm sorry, my response was stopped due to: ${candidate.finishReason.toLowerCase().replace(/_/g, ' ')}.`;
+            } else if (result?.promptFeedback && result.promptFeedback.blockReason) {
+                errorText = `I'm sorry, your prompt could not be processed due to: ${result.promptFeedback.blockReason.toLowerCase().replace(/_/g, ' ')}.`;
+            } else if (!agentResponseText) {
+                console.warn("Gemini response missing text content:", result);
+            }
+
+            if (!silent) {
+                displayMessage('agent', errorText, agentId);
+            } else {
+                console.warn(`Silent-mode: agent ${agentId} error: ${errorText}`);
+            }
+        }
+
+    } catch (err) {
+        console.error('Error fetching agent:', err);
+        removeTypingIndicator();
+        if (!silent) {
+            displayMessage('agent', "I'm experiencing network difficulties connecting to my services. Please check your connection or try again shortly.", agentId);
+        } else {
+            console.warn(`Silent-mode network error for ${agentId}:`, err.message);
+        }
+    }
+}
+
+/**
+ * Deterministic / capability-aware orchestrator.
+ * Uses selectLeadAgent() and ONLY active agents.
+ */
+async function orchestrateMultiAgentResponse(userMessage) {
+    const agentsInfo = (typeof getSelectedAgentsInfo === 'function') ? getSelectedAgentsInfo() : [];
+    const activeIds = agentsInfo.map(a => a.id);
+
+    if (activeIds.length === 0) {
+        await sendMessageToAgent(userMessage, 'hakim', { silent: false });
+        return;
+    }
+
+    const { leadAgent, activeAgents } = selectLeadAgent(userMessage, ['nouf','omar','layla','hakim']);
+    const effectiveLead = leadAgent || activeAgents[0] || activeIds[0];
+
+    // show routing note (filtered to active agents only)
+    if (typeof chatMessages !== 'undefined' && chatMessages) {
+        const orchestrationNote = document.createElement('div');
+        orchestrationNote.className = 'agent-discussion-indicator';
+        orchestrationNote.style.fontSize = '0.85rem';
+        orchestrationNote.style.opacity = '0.95';
+        const routed = (activeAgents && activeAgents.length) ? activeAgents : activeIds;
+        const routedNames = routed.map(id => {
+            const p = (typeof personaData !== 'undefined') ? personaData.find(x => x.id === id) : null;
+            return p ? p.name.split(' ')[0] : id;
+        });
+        orchestrationNote.innerHTML = `<i class="fas fa-route"></i> Hakim routing to: ${routedNames.join(', ')}`;
+        chatMessages.appendChild(orchestrationNote);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    showTypingIndicator();
+
+    for (const aid of activeAgents) {
+        const silent = (aid !== effectiveLead);
+        await sendMessageToAgent(userMessage, aid, { silent });
+    }
+
+    // lock conversation to the lead for follow-ups
+    conversationLead = effectiveLead;
+}
+
+/* === END PATCH === */
+
+</script>
 
 
 
