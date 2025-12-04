@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--For the voice agent-->
+    <script src="voiceManager.js"></script>
     <style>
         /* HRSD Font Faces */
         @font-face {https://github.com/omar-shandaq/AI-Agent-/edit/main/index.html
@@ -108,7 +110,7 @@
             --primary-teal: #148287;
             --primary-navy: #14415A;
 
-            --primary-color: var(--primary-orange);
+            --primary-color: var(--primary-blue);
             --secondary-color: var(--primary-green);
             --accent-color: var(--primary-teal);
             --dark-bg: var(--primary-navy);
@@ -121,9 +123,9 @@
             --container-bg: rgba(20, 65, 90, 0.5);
             --container-bg-light: rgba(255, 255, 255, 0.08);
 
-            --shadow-sm: 0 2px 8px rgba(245, 150, 30, 0.1);
-            --shadow-md: 0 4px 16px rgba(245, 150, 30, 0.2);
-            --shadow-lg: 0 8px 32px rgba(245, 150, 30, 0.3);
+            --shadow-sm: 0 2px 8px rgba(243, 199, 144 0.1);
+            --shadow-md: 0 4px 16px rgba(243, 199, 144, 0.2);
+            --shadow-lg: 0 8px 32px rgba(243, 199, 144, 0.3);
 
             --vh: 1vh;
         }
@@ -213,7 +215,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: 2px solid var(--primary-orange);
+            border: 2px solid var(--primary-blue);
         }
 
         .header-right .user-profile span { font-weight: 500; }
@@ -232,10 +234,10 @@
 
         .mobile-menu-btn { 
             display: none;
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
         .mobile-menu-btn i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
 
         .nav-tabs-container {
@@ -271,7 +273,7 @@
             overflow: hidden;
         }
         .nav-tabs button i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
 
         .nav-tabs button::before {
@@ -281,7 +283,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(245, 150, 32, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(243, 199, 144 0.2), transparent);
             transition: left 0.5s;
         }
 
@@ -290,15 +292,15 @@
         }
 
         #meetings-modal-title {
-            color: var(--primary-orange);
-            text-shadow: 0 2px 10px rgba(245, 150, 30, 0.3);
+            color: var(--primary-blue);
+            text-shadow: 0 2px 10px rgba(243, 199, 144 0.3);
         }
 
         .nav-tabs button.active {
             color: var(--text-dark);
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e);
             font-weight: 500;
-            box-shadow: 0 4px 15px rgba(245, 150, 30, 0.4);
+            box-shadow: 0 4px 15px rgba(243, 199, 144 0.4);
             border-color: rgba(0, 169, 157, 0.3);
         }
         .nav-tabs button.active i {
@@ -362,6 +364,7 @@
             overflow-y: auto;
             overflow-x: hidden;
             scrollbar-gutter: stable;
+            margin: 5px;
         }
 
         /* Removed old single persona image styles - now using multi-agent selection */
@@ -396,7 +399,7 @@
             align-items: center;
             justify-content: center;
             padding: 6px 14px;
-            margin: -4px 0 24px; /* lift status pill a bit higher, add breathing room above cards */
+            margin: 0px 0 24px; /* lift status pill a bit higher, add breathing room above cards */
         }
         
         #modeStatusLabel {
@@ -416,7 +419,7 @@
         }
         .mode-status-multi {
             background: linear-gradient(135deg, rgba(245, 150, 32, 0.3) 0%, rgba(245, 150, 32, 0.15) 100%);
-            border: 2px solid var(--primary-orange);
+            border: 2px solid var(--primary-blue);
             color: var(--text-dark);
             box-shadow: 0 0 5px rgba(245, 150, 32, 0.2), 0 2px 8px rgba(245, 150, 32, 0.1);
         }
@@ -576,7 +579,7 @@
         }
 
         .persona-display::-webkit-scrollbar-thumb {
-            background: var(--primary-orange);
+            background: var(--primary-blue);
             border-radius: 10px;
         }
         
@@ -908,12 +911,12 @@
         }
         
         .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--primary-orange);
+            background: var(--primary-blue);
             border-radius: 10px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-orange);
+            background: #008a7e;
         }
 
         .message-bubble {
@@ -956,7 +959,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
         .message-bubble.user .content {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e);
             color: #fff;
             border-bottom-right-radius: 5px;
         }
@@ -986,7 +989,7 @@
         .message-bubble.agent .content h1,
         .message-bubble.agent .content h2,
         .message-bubble.agent .content h3 {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
             margin-top: 1em;
             margin-bottom: 0.5em;
             border-bottom: 1px solid var(--border-color);
@@ -1023,7 +1026,7 @@
             text-decoration: underline;
         }
         .message-bubble.agent .content blockquote {
-            border-left: 4px solid var(--primary-orange);
+            border-left: 4px solid var(--primary-blue);
             padding-left: 15px;
             margin-left: 0;
             font-style: italic;
@@ -1067,6 +1070,7 @@
             flex-shrink: 0;
             overflow: visible; /* Allow dropdowns to overflow */
             position: relative; /* For absolute positioned children */
+            height: auto !important;
         }
         .chat-input-controls { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
         #chatInput {
@@ -1097,28 +1101,28 @@
             justify-content: center;
         }
         .chat-input-controls button i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
         .chat-input-controls button:hover {
             color: var(--text-dark);
-            background: var(--primary-orange);
-            border-color: var(--primary-orange);
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
             transform: scale(1.1);
         }
         .chat-input-controls button:hover i {
             color: var(--text-dark);
         }
         .send-btn {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange)) !important;
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e) !important;
             color: white !important;
             border: none !important;
-            box-shadow: 0 4px 15px rgba(245, 150, 32, 0.4);
+            box-shadow: 0 4px 15px rgba(243, 199, 144 0.4);
         }
         .send-btn i {
             color: white !important;
         }
         .send-btn:hover {
-            box-shadow: 0 6px 20px rgba(245, 150, 32, 0.6) !important;
+            box-shadow: 0 6px 20px rgba(243, 199, 144 0.6) !important;
             transform: scale(1.1) !important;
         }
 
@@ -1171,12 +1175,12 @@
             gap: 8px;
         }
         .summary-header button i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
         .summary-header button:hover {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e);
             color: #fff;
-            border-color: var(--primary-orange);
+            border-color: var(--primary-blue);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(245, 150, 32, 0.4);
         }
@@ -1205,9 +1209,9 @@
         .key-topics-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
         .key-topic-pill { background: var(--container-bg-light); border: 1px solid var(--border-color); color: var(--text-light); padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
         .key-topic-pill:hover { background: var(--primary-blue); color: var(--text-dark); border-color: var(--primary-blue); }
-        .urgent-meeting-highlight { background: linear-gradient(135deg, rgba(245, 150, 32, 0.3) 0%, rgba(245, 150, 32, 0.15) 100%); border: 3px solid var(--primary-orange); border-radius: 12px; padding: 18px; margin: 15px 0; box-shadow: 0 0 5px rgba(245, 150, 32, 0.2), 0 2px 8px rgba(245, 150, 32, 0.1); position: relative; overflow: hidden; }
+        .urgent-meeting-highlight { background: linear-gradient(135deg, rgba(245, 150, 32, 0.3) 0%, rgba(245, 150, 32, 0.15) 100%); border: 3px solid var(--primary-blue); border-radius: 12px; padding: 18px; margin: 15px 0; box-shadow: 0 0 5px rgba(245, 150, 32, 0.2), 0 2px 8px rgba(245, 150, 32, 0.1); position: relative; overflow: hidden; }
         @keyframes pulseUrgent { 0%, 100% { box-shadow: 0 0 5px rgba(245, 150, 32, 0.2), 0 2px 8px rgba(245, 150, 32, 0.1); } 50% { box-shadow: 0 0 8px rgba(245, 150, 32, 0.3), 0 2px 10px rgba(245, 150, 32, 0.15); } }
-        .urgent-meeting-highlight h4 { color: var(--primary-orange) !important; border-bottom: 2px solid var(--primary-orange) !important; margin-top: 0 !important; font-size: 1.2rem !important; text-shadow: none; }
+        .urgent-meeting-highlight h4 { color: var(--primary-blue) !important; border-bottom: 2px solid var(--primary-blue) !important; margin-top: 0 !important; font-size: 1.2rem !important; text-shadow: none; }
         .urgent-meeting-highlight p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
 
         .typing-indicator { display: flex; align-items: center; }
@@ -1248,13 +1252,13 @@
         }
         .tool-icon {
             font-size: 2.2rem;
-            color: var(--primary-orange);
+            color: var(--primary-blue);
             margin-bottom: 15px;
             transition: all 0.3s;
         }
         .tool-card:hover .tool-icon {
             transform: scale(1.1);
-            text-shadow: 0 2px 15px rgba(245, 150, 32, 0.4);
+            text-shadow: 0 2px 15px #008a7e;
         }
         .tool-title {
             color: var(--text-dark);
@@ -1332,12 +1336,12 @@
             font-size: 0.9rem;
         }
         .calendar-nav-btn i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
         .calendar-nav-btn:hover {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e);
             color: var(--text-dark);
-            box-shadow: 0 2px 10px rgba(245, 150, 32, 0.4);
+            box-shadow: 0 2px 10px #008a7e;
             transform: scale(1.1);
         }
         .calendar-nav-btn:hover i {
@@ -1381,14 +1385,14 @@
         }
         .view-toggle button i,
         .mobile-view-btn i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
 
         .view-toggle button.active,
         .mobile-view-btn.active {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e);
             color: var(--text-dark);
-            box-shadow: 0 2px 10px rgba(245, 150, 32, 0.4);
+            box-shadow: 0 2px 10px rgba(243, 199, 144 0.4);
         }
         .view-toggle button.active i,
         .mobile-view-btn.active i {
@@ -1653,7 +1657,7 @@
         }
         .event {
             background: linear-gradient(135deg, rgba(0, 169, 157, 0.15), rgba(0, 169, 157, 0.25));
-            border-left: 4px solid var(--primary-orange);
+            border-left: 4px solid var(--primary-blue);
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -1670,7 +1674,7 @@
         .event-title { font-weight: 600; color: var(--text-dark); font-size: 0.95rem; }
         .event-milestone {
             background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.25));
-            border-left-color: #ffc107;
+            border-left-color: #008a7e;
         }
         .event-milestone:hover {
             background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 193, 7, 0.4));
@@ -1697,13 +1701,13 @@
         }
         .topic-icon {
             font-size: 2.5rem;
-            color: var(--primary-orange);
+            color: var(--primary-blue);
             margin-bottom: 15px;
             transition: all 0.3s;
         }
         .topic-card:hover .topic-icon {
             transform: scale(1.1) rotate(5deg);
-            text-shadow: 0 4px 20px rgba(245, 150, 32, 0.5);
+            text-shadow: 0 4px 20px #008a7e;
         }
         .topic-title {
             color: var(--text-dark);
@@ -1823,7 +1827,7 @@
             }
         }
         .close-button {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
             position: absolute;
             top: 15px;
             right: 25px;
@@ -1840,7 +1844,7 @@
         }
         .close-button:hover {
             color: #fff;
-            background: var(--primary-orange);
+            background: var(--primary-blue);
             transform: rotate(90deg);
         }
         .modal-content h2 {
@@ -1879,14 +1883,14 @@
             font-weight: 500;
         }
         .event-actions button i, .day-actions button i {
-            color: var(--primary-orange);
+            color: var(--primary-blue);
         }
         .event-actions button:hover, .day-actions button:hover {
-            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            background: linear-gradient(135deg, var(--primary-blue), #008a7e);
             color: var(--text-dark);
             border-color: transparent;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(245, 150, 32, 0.4);
+            box-shadow: 0 4px 15px #008a7e;
         }
         .event-actions button:hover i, .day-actions button:hover i {
             color: var(--text-dark);
@@ -2012,7 +2016,7 @@
             padding: 18px;
             border-radius: 12px;
             margin-bottom: 12px;
-            border-left: 4px solid var(--primary-orange);
+            border-left: 4px solid var(--primary-blue);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         #meetings-modal-list .meeting-item:hover {
@@ -3580,7 +3584,41 @@
                 max-width: 100vw;
             }
         }
-    </style>
+
+        #chatInput {
+            width: 100%;
+            height: auto;
+            max-height: 160px;
+            resize: none;
+            overflow-y: auto;
+            line-height: 1.45;
+            padding: 12px 14px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            scrollbar-width: thin;
+            white-space: pre-wrap;
+        }
+
+
+/* Focus Area Maximize Modal styles (agent-info style) */
+#focus-area-maximize-modal .modal-backdrop { position: fixed; inset:0; background: rgba(223, 5, 5, 0.45); z-index:1000; }
+#focus-area-maximize-modal { position: fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:1001; }
+#focus-area-maximize-modal .modal-content.large-modal { width: 95%; max-width: 1100px; border-radius: 12px; background: #fff; box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+#focus-area-maximize-modal .modal-body { padding: 22px; max-height: 85vh; overflow:auto; }
+#focus-area-maximize-modal .agent-info-grid { display:flex; gap:20px; }
+#focus-area-maximize-modal .agent-info-main { flex: 1 1 65%; min-width: 0; }
+#focus-area-maximize-modal .agent-info-side { flex: 0 0 30%; background: #fafafa; padding: 12px; border-radius: 8px; border:1px solid #eee; max-height: 70vh; overflow:auto; }
+#focus-area-maximize-modal .fa-section { margin-bottom: 14px; }
+#focus-area-maximize-modal .fa-title { margin:0 0 8px 0; font-size:1.1rem; font-weight:700; }
+#focus-area-maximize-modal .fa-kpis li, #focus-area-maximize-modal .fa-initiatives li, #focus-area-maximize-modal .fa-metrics li, #focus-area-maximize-modal .fa-attachments li, #focus-area-maximize-modal .fa-subareas li { margin-bottom:8px; }
+#focus-area-maximize-modal .modal-close { position:absolute; right:12px; top:10px; background:transparent; border:none; font-size:22px; cursor:pointer; }
+#focus-area-maximize-modal .modal-actions { display:flex; gap:8px; justify-content:flex-end; }
+.more-details-btn { margin-left:10px; padding:6px 10px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:0.9rem; }
+</style>
 <style>.BDTLL_status {
     cursor: pointer;
     display: inline;
@@ -3718,7 +3756,7 @@
         </div>
         <div class="header-right">
             <div class="user-profile">
-                <span class="welcome-text">Welcome Ahmad</span>
+                <span class="welcome-text">Welcome Excellency Ahmad</span>
                 <img src="https://pbs.twimg.com/profile_images/1902451967101636610/TQ-VQEPY_400x400.jpg" alt="User Avatar">
             </div>
             <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
@@ -3809,7 +3847,7 @@
                 <!-- Chat Interaction Area -->
                 <div class="chat-interaction-area">
                     <button class="section-control-btn" id="centerSectionToggle" title="Maximize"
-                        style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, rgba(20, 65, 90, 0.95), rgba(20, 130, 135, 0.95)); border: 2px solid #F59620; color: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(20px); box-shadow: 0 4px 15px rgba(245, 150, 30, 0.3); transition: all 0.3s ease;">
+                        style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, rgba(20, 65, 90, 0.95), rgba(20, 130, 135, 0.95)); border: 2px solid #008a7e; color: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(20px); box-shadow: 0 4px 15px #008a7e; transition: all 0.3s ease;">
                         <i class="fas fa-expand" style="pointer-events: none;"></i>
                     </button>
                     <div class="chat-messages" id="chatMessages">
@@ -3867,13 +3905,15 @@
 <p><strong>Recommendation:</strong> We must prioritize the development of a unified <strong>Individual Empowerment Index (IEI)</strong>. This index will move beyond simple employment figures to measure the sustained financial independence, quality of life, and civic contribution of individuals leaving assistance programs, ensuring true, long-term empowerment rather than temporary relief.</p>
 </div></div></div></div>
                     <div class="chat-input-area">
-                        <input id="chatInput" type="text" placeholder="Ask me anything... Type or Talk">
+                        <textarea  id="chatInput" type="text" placeholder="Ask me anything... Type or Talk" rows="1"></textarea>
                         <div class="chat-input-controls">
                             <button id="agentSelectorBtn" class="" title="Select Agent">
                                 <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Hakim" alt="Agent">
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                             <button id="chat-action-btn" title="Discuss a Topic"><i class="fas fa-plus"></i></button>
+                            <button id="mic-btn" title="Voice Input"><i class="fas fa-microphone"></i></button>
+                            <!-- <button id="mic-btn">🎤</button><div id="chatMessages"></div> -->
                             <button id="send-btn" class="send-btn" title="Send Message"><i class="fas fa-paper-plane"></i></button>
                         </div>
                     </div>
@@ -3898,7 +3938,17 @@
                     <div class="topic-icon"><i class="fas fa-briefcase"></i></div>
                     <div class="topic-content">
                         <h3 class="topic-title">Strengthening Labor Market</h3>
-                        <p class="topic-description">Developing policies to create an attractive, inclusive, and safe labor market that empowers Saudi nationals and aligns with global standards.</p>
+                        <p class="topic-description"
+                        data-long-description="Strengthening the labor market focuses on creating a dynamic, competitive, and future-ready workforce that supports the Kingdom’s economic transformation. This involves improving job readiness, enhancing employment mobility, and ensuring that both workers and employers thrive in a rapidly evolving landscape. The effort includes modernizing workforce regulations, enhancing the quality of employment opportunities, and ensuring that national talent is equipped with the skills needed for emerging sectors and high-growth industries. By advancing transparency, efficiency, and alignment across the labor ecosystem, this focus area contributes directly to higher productivity, stronger private-sector participation, and long-term national competitiveness.
+
+                                                Key Aspects:
+                                                • Modernizing labor policies and regulations to support emerging economic sectors.  
+                                                • Enhancing job readiness and employability for youth and new graduates.  
+                                                • Promoting workforce participation among women and underrepresented groups.  
+                                                • Strengthening job-matching and mobility through digital platforms and national systems.  
+                                                • Ensuring high workplace standards, safety, and compliance across all regions.
+                                                ">
+                                                Developing policies to create an attractive, inclusive, and safe labor market that empowers Saudi nationals and aligns with global standards.</p>
                     </div>
                     <div class="topic-kpis">
                         <div class="kpi-item">
@@ -3922,7 +3972,16 @@
                      <div class="topic-icon"><i class="fas fa-users"></i></div>
                     <div class="topic-content">
                         <h3 class="topic-title">Empowering Society &amp; Individuals</h3>
-                        <p class="topic-description">Enhancing social development, empowering individuals and communities, and promoting self-reliance through targeted programs and support.</p>
+                        <p class="topic-description"
+                        data-long-description="Empowering Society & Individuals aims to build a resilient, capable, and self-reliant population that actively contributes to national progress. This includes strengthening social services, enhancing family and community stability, and ensuring individuals have the tools and support needed to succeed across all stages of life. The focus area integrates social development programs, targeted interventions, and capability-building initiatives that improve well-being, foster inclusion, and enable upward mobility. By addressing both current and future social needs, this pillar reinforces national cohesion and promotes an environment where every individual and community can reach their full potential.
+
+                                                Key Aspects:
+                                                • Advancing social protection programs that promote independence and dignity.  
+                                                • Strengthening family support systems and community-based development.  
+                                                • Enhancing individual capabilities through targeted skill-building programs.  
+                                                • Improving access to digital social services and integrated care pathways.  
+                                                • Supporting vulnerable groups through well-coordinated, outcome-driven initiatives.">
+                                                Enhancing social development, empowering individuals and communities, and promoting self-reliance through targeted programs and support.</p>
                     </div>
                      <div class="topic-kpis">
                         <div class="kpi-item">
@@ -3946,7 +4005,16 @@
                      <div class="topic-icon"><i class="fas fa-hand-holding-heart"></i></div>
                     <div class="topic-content">
                         <h3 class="topic-title">Enabling the Non-Profit Sector</h3>
-                        <p class="topic-description">Fostering the growth and impact of the non-profit sector to expand its contribution to the economy and social development.</p>
+                        <p class="topic-description"
+                        data-long-description="Enabling the Non-Profit Sector focuses on developing a strong, high-impact ecosystem that contributes meaningfully to social and economic development. This includes improving governance, encouraging innovation, and building operational excellence across non-profit organizations. The effort also involves supporting sustainable funding models, strengthening leadership and talent pipelines, and expanding the sector’s ability to address national priorities. By enabling organizations to deliver measurable, evidence-based impact, this focus area ensures the sector becomes a key partner in national development.
+
+                                                Key Aspects:
+                                                • Enhancing governance standards and regulatory clarity across non-profits.  
+                                                • Supporting sustainable financing models and diversified funding streams.  
+                                                • Building leadership and organizational capabilities across the sector.  
+                                                • Improving program quality, monitoring, and impact measurement.  
+                                                • Expanding regional and specialized non-profit organizations aligned with national goals.">
+                                                Fostering the growth and impact of the non-profit sector to expand its contribution to the economy and social development.</p>
                     </div>
                      <div class="topic-kpis">
                         <div class="kpi-item">
@@ -3970,7 +4038,16 @@
                      <div class="topic-icon"><i class="fas fa-handshake"></i></div>
                     <div class="topic-content">
                         <h3 class="topic-title">Strategic Partnerships</h3>
-                        <p class="topic-description">Building effective and sustainable partnerships with public, private, and non-profit entities to achieve shared national goals.</p>
+                        <p class="topic-description"
+                        data-long-description="Strategic Partnerships focuses on developing meaningful collaborations with public, private, and non-profit entities to accelerate national objectives. This includes strengthening coordination mechanisms, aligning cross-sector priorities, and establishing partnerships that bring innovation, expertise, and resources to key areas. The pillar enhances the efficiency of collective action and expands the ministry’s capacity to implement programs at scale. Through both national and international engagements, this focus area contributes to improved knowledge transfer, stronger service delivery, and broader national impact.
+
+                                            Key Aspects:
+                                            • Forming high-impact partnerships with public and private sector organizations.  
+                                            • Expanding government-to-government and international cooperation networks.  
+                                            • Strengthening alignment mechanisms for joint programs and shared priorities.  
+                                            • Facilitating knowledge exchange and cross-sector innovation.  
+                                            • Building scalable partnership models that accelerate strategic outcomes.">
+                        Building effective and sustainable partnerships with public, private, and non-profit entities to achieve shared national goals.</p>
                     </div>
                      <div class="topic-kpis">
                         <div class="kpi-item">
@@ -4158,7 +4235,7 @@
                 
                 <!-- Loading State -->
                 <div id="news-loading" style="text-align: center; padding: 40px; display: none;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-orange); margin-bottom: 15px;"></i>
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 15px;"></i>
                     <p style="opacity: 0.8;">Fetching latest news...</p>
                 </div>
                 
@@ -4180,66 +4257,37 @@
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fa-regular fa-newspaper"></i></div>
                     <h3 class="tool-title">Official Press Release Template</h3>
-                    <p class="tool-description">Automatically generates insightful charts and dashboards from ministry data, highlighting key trends, anomalies, and performance metrics without manual setup.</p>
-                    <button class="tool-action-btn" data-tool-action="visualize"><i class="fas fa-eye"></i> Explore Tool</button>
+                    <p class="tool-description">A structured, professional format for announcing major initiatives, achievements, or decisions to the public and media while ensuring clarity, consistency, and alignment with official communication standards.</p>
+                    <button class="tool-action-btn" data-tool-action="press"><i class="fas fa-align-left"></i> Generate Template</button>
                 </div>
                 <!-- Tool Card 2: Predictive Analytics -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fa-solid fa-file-lines"></i></div>
                     <h3 class="tool-title">Internal Memo</h3>
-                    <p class="tool-description">Simulates the potential impact of proposed policies on key indicators (e.g., employment, social welfare) using AI to forecast outcomes and risks.</p>
-                    <button class="tool-action-btn" data-tool-action="predict"><i class="fas fa-cogs"></i> Run Simulation</button>
+                    <p class="tool-description">A formal communication template for sharing updates, decisions, or instructions within the organization, designed to streamline internal alignment and ensure clear, concise information flow.</p>
+                    <button class="tool-action-btn" data-tool-action="memo"><i class="fas fa-align-left"></i> Generate Template</button>
                 </div>
                 <!-- Tool Card 3: Report Generation -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fa-solid fa-building-columns"></i></div>
                     <h3 class="tool-title">Interministerial Request</h3>
-                    <p class="tool-description">Condenses lengthy reports, research papers, and meeting transcripts into concise executive summaries, extracting key findings and action items.</p>
-                    <button class="tool-action-btn" data-tool-action="summarize"><i class="fas fa-align-left"></i> Generate Summary</button>
+                    <p class="tool-description">A standardized template for formally requesting information, support, or coordination from other government ministries, ensuring diplomatic tone, clarity of purpose, and administrative precision.</p>
+                    <button class="tool-action-btn" data-tool-action="interministerial"><i class="fas fa-align-left"></i> Generate Template</button>
                 </div>
                  <!-- Tool Card 4: Sentiment Analysis -->
                 <div class="tool-card">
                     <div class="tool-icon"><i class="fas fa-comments"></i></div>
                     <h3 class="tool-title">Speech Template</h3>
-                    <p class="tool-description">Act as a top-tier speechwriter specializing in impactful, ministry-related communication. Your goal is to draft a speech that [state event type, e.g., weekly sermon, youth group meeting, community outreach presentation].
-                        **Audience Details:**
-                        *   **Who:** [Describe your audience, e.g., mixed-age congregation, church leadership, youth]
-                        *   **Size:** [Insert number or range, e.g., 50 people, large crowd]
-                        *   **Their likely concerns/emotions:** [e.g., concerns about current events, feeling inspired after a recent event]
-
-                        **Speech Specifications:**
-                        *   **Goal:** The primary objective is to [e.g., inspire action on a new initiative, provide comfort during a difficult time, educate on a biblical passage].
-                        *   **Key Message/Theme:** The single most important takeaway is "[Insert your core message or theme]".
-                        *   **Tone:** The speech should be [e.g., empathetic and professional, inspirational and encouraging, serious yet hopeful, slightly humorous but sincere].
-                        *   **Length:** [Specify length, e.g., 10 minutes, 1500 words, short 5-minute talk].
-                        *   **Style Notes:** [e.g., Use the ESV Bible translation. Incorporate one personal anecdote. Avoid overly complex theological jargon].
-
-                        **Content Requirements:**
-                        *   **Introduction:** Start with a strong hook, maybe a quote or a short anecdote, to grab attention.
-                        *   **Main Points:** Structure the speech with 3 key points, using bullet points in your response for clarity.
-                            1.  [Insert Point 1 idea]
-                            2.  [Insert Point 2 idea]
-                            3.  [Insert Point 3 idea]
-                        *   **Evidence/Examples:** Where possible, include relevant biblical references or real-world examples to support each point.
-                        *   **Conclusion:** End with a powerful closing statement and a clear call to action.
-
-                        Please provide a full, structured draft of the speech based on the details above.
+                    <p class="tool-description">A guided framework for preparing executive speeches, providing structure for key messages, strategic themes, and audience engagement while maintaining a polished, authoritative voice.
                         </p>
-                    <button class="tool-action-btn" data-tool-action="sentiment"><i class="fas fa-search"></i> View Sentiment</button>
+                    <button class="tool-action-btn" data-tool-action="speech"><i class="fas fa-align-left"></i> Generate Template</button>
                 </div>
                  <!-- Tool Card 5: Smart Scheduling -->
                  <div class="tool-card">
                     <div class="tool-icon"><i class="fa-solid fa-landmark-flag"></i></div>
                     <h3 class="tool-title">Diplomatic Communication Template</h3>
-                    <p class="tool-description">"Act as a seasoned diplomat and communications specialist for a Ministry of Foreign Affairs.
-Objective: [Clearly state the goal, e.g., "Draft a press release," "Compose a formal letter," "Create talking points for a meeting."]
-Context: [Provide all relevant background information, key policy points, involved countries/entities, and the specific situation.]
-Audience: [Specify the target audience, e.g., "The general public," "Foreign dignitaries," "Internal staff," "A specific ambassador."]
-Tone/Style: [Define the required tone, e.g., "Formal yet engaging," "Confidential and objective," "Firm but respectful," "Neutral and informative."]
-Key Messages: [List 2-3 mandatory points that must be included.]
-Constraints: [Mention any length limits, specific formatting requirements, or details to omit.]
-Desired Output: [e.g., "A final draft ready for review."]</p>
-                    <button class="tool-action-btn" data-tool-action="schedule"><i class="fas fa-calendar-plus"></i> Schedule Meeting</button>
+                    <p class="tool-description">A formal diplomatic correspondence format used for communicating with international counterparts, embassies, and global institutions, ensuring protocol compliance, professionalism, and cross-border clarity.</p>
+                    <button class="tool-action-btn" data-tool-action="diplomatic"><i class="fas fa-align-left"></i> Generate Template</button>
                 </div>
             </div> 
         </div>
@@ -4251,18 +4299,8 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 <div class="topic-card" data-topic-id="labor-market">
                     <div class="topic-icon"><i class="fas fa-briefcase"></i></div>
                     <div class="topic-content">
-                        <h3 class="topic-title">Strengthening Labor Market</h3>
-                        <p class="topic-description">Developing policies to create an attractive, inclusive, and safe labor market that empowers Saudi nationals and aligns with global standards.</p>
-                    </div>
-                    <div class="topic-kpis">
-                        <div class="kpi-item">
-                            <span class="kpi-value">4</span>
-                            <span class="kpi-label">Strategic KPIs</span>
-                        </div>
-                        <div class="kpi-item">
-                            <span class="kpi-value">7</span>
-                            <span class="kpi-label">Related Initiatives</span>
-                        </div>
+                        <h3 class="topic-title">Consultation</h3>
+                        <p class="topic-description">Providing strategic, data-driven guidance to support informed decision-making, clarify priorities, and address emerging challenges across HRSD initiatives and programs.</p>
                     </div>
                     <div class="topic-actions">
                         <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
@@ -4275,18 +4313,8 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 <div class="topic-card" data-topic-id="empowerment">
                      <div class="topic-icon"><i class="fas fa-users"></i></div>
                     <div class="topic-content">
-                        <h3 class="topic-title">Empowering Society &amp; Individuals</h3>
-                        <p class="topic-description">Enhancing social development, empowering individuals and communities, and promoting self-reliance through targeted programs and support.</p>
-                    </div>
-                     <div class="topic-kpis">
-                        <div class="kpi-item">
-                            <span class="kpi-value">5</span>
-                            <span class="kpi-label">Strategic KPIs</span>
-                        </div>
-                        <div class="kpi-item">
-                            <span class="kpi-value">9</span>
-                            <span class="kpi-label">Related Initiatives</span>
-                        </div>
+                        <h3 class="topic-title">Scheduling</h3>
+                        <p class="topic-description">Coordinating high-priority meetings, engagements, and workflows to ensure seamless alignment between stakeholders, agendas, and organizational objectives.</p>
                     </div>
                     <div class="topic-actions">
                         <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
@@ -4299,18 +4327,8 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 <div class="topic-card" data-topic-id="non-profit">
                      <div class="topic-icon"><i class="fas fa-hand-holding-heart"></i></div>
                     <div class="topic-content">
-                        <h3 class="topic-title">Enabling the Non-Profit Sector</h3>
-                        <p class="topic-description">Fostering the growth and impact of the non-profit sector to expand its contribution to the economy and social development.</p>
-                    </div>
-                     <div class="topic-kpis">
-                        <div class="kpi-item">
-                            <span class="kpi-value">3</span>
-                            <span class="kpi-label">Strategic KPIs</span>
-                        </div>
-                        <div class="kpi-item">
-                            <span class="kpi-value">4</span>
-                            <span class="kpi-label">Related Initiatives</span>
-                        </div>
+                        <h3 class="topic-title">News and Media</h3>
+                        <p class="topic-description">Monitoring, analyzing, and summarizing internal and external media developments to provide timely insights that support awareness, reputation management, and strategic communication.</p>
                     </div>
                     <div class="topic-actions">
                         <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
@@ -4323,18 +4341,8 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 <div class="topic-card" data-topic-id="strategic-partnerships">
                      <div class="topic-icon"><i class="fas fa-handshake"></i></div>
                     <div class="topic-content">
-                        <h3 class="topic-title">Strategic Partnerships</h3>
-                        <p class="topic-description">Building effective and sustainable partnerships with public, private, and non-profit entities to achieve shared national goals.</p>
-                    </div>
-                     <div class="topic-kpis">
-                        <div class="kpi-item">
-                            <span class="kpi-value">2</span>
-                            <span class="kpi-label">Strategic KPIs</span>
-                        </div>
-                        <div class="kpi-item">
-                            <span class="kpi-value">6</span>
-                            <span class="kpi-label">Related Initiatives</span>
-                        </div>
+                        <h3 class="topic-title">Task Management &amp; Follow up</h3>
+                        <p class="topic-description">Tracking key actions, monitoring progress, and ensuring timely follow-up on commitments to maintain operational momentum and accountability across initiatives.</p>
                     </div>
                     <div class="topic-actions">
                         <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
@@ -4343,6 +4351,50 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                         <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
                     </div>
                 </div>
+                <!-- Topic Card 5 -->
+                <div class="topic-card" data-topic-id="strategic-partnerships">
+                     <div class="topic-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Official Correspondents</h3>
+                        <p class="topic-description">Drafting, refining, and managing formal communications, correspondence, and executive messages to ensure professionalism, clarity, and alignment with organizational priorities.</p>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+                <!-- Topic Card 6 -->
+                <div class="topic-card" data-topic-id="strategic-partnerships">
+                     <div class="topic-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Committees Management </h3>
+                        <p class="topic-description">Supporting the organization, documentation, and follow-through of committee work by facilitating agendas, minutes, decisions, and action items for effective governance.</p>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+                <!-- Topic Card 7 -->
+                <div class="topic-card" data-topic-id="strategic-partnerships">
+                     <div class="topic-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="topic-content">
+                        <h3 class="topic-title">Strategic &amp; Operational KPI</h3>
+                        <p class="topic-description">Monitoring and interpreting performance indicators to assess progress, identify gaps, and support evidence-based decision-making across strategic and operational objectives.</p>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="topic-action-btn" data-action="meetings"><i class="fas fa-calendar-days"></i> Related Meetings</button>
+                        <button class="topic-action-btn" data-action="deeper"><i class="fas fa-magnifying-glass"></i> Dig Deeper</button>
+                        <button class="topic-action-btn" data-action="references"><i class="fas fa-file-alt"></i> View References</button>
+                        <button class="topic-action-btn" data-action="news"><i class="fas fa-newspaper"></i> Related News</button>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     
@@ -4430,7 +4482,42 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
     <!-- Floating "Ask Agent" Button -->
     <div id="ask-agent-btn" style="display: none;"><i class="fas fa-comment-dots"></i> Ask Agent</div>
 
+    <!-- Focus Area Details Modal -->
+    <div id="focusAreaModal" class="modal">
+        <div class="modal-content" id="focus-area-modal-content">
+            <span class="close-button" onclick="closeFocusAreaModal()">&times;</span>
+
+            <h2 id="focusAreaTitle"></h2>
+
+            <div id="focusAreaDescription" style="margin-bottom:20px; opacity:0.9;"></div>
+
+            <h3 style="color:var(--primary-blue); margin-top:25px;">Strategic KPIs</h3>
+            <div id="focusAreaKPIs" style="margin-bottom:20px;"></div>
+
+            <h3 style="color:var(--primary-blue); margin-top:25px;">Related Initiatives</h3>
+            <div id="focusAreaInitiatives"></div>
+        </div>
+    </div>
+
+
     <script>
+
+        // Hardcoded Gemini API key and endpoint (used instead of Vercel proxy)
+        // NOTE: This file is for local / demo purposes only; do NOT deploy a hardcoded key publicly.
+        const GEMINI_API_KEY = 'AIzaSyCVTUgYEEAs42wg1pFTLJFVxzQI3wh1wYI'; // main agents
+        const GEMINI_MODEL_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        // Separate key just for tweet summarization to spread load
+        const GEMINI_SUMMARY_API_KEY = 'AIzaSyAjZ6GmrhsbnILf2ZTfJaYxO3xUpjYvzAo';
+        const GEMINI_SUMMARY_MODEL_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_SUMMARY_API_KEY}`;
+
+        const chatInput = document.getElementById("chatInput");
+
+        chatInput.addEventListener("input", () => {
+            chatInput.style.height = "auto";
+            //chatInput.style.height = chatInput.scrollHeight + "px";
+        });
+
+
         document.addEventListener('DOMContentLoaded', () => {
             // --- DATA ---
             const personaData = [
@@ -4438,12 +4525,194 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 // Update Layla's systemPrompt for insights/charts
                 { id: 'layla', name: 'Layla Al-Farsi', title: 'Data Analytics Agent', largeImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e/3f6fb035-158b-47f1-8c69-5fe9a407d4f2.png', smallImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e/3f6fb035-158b-47f1-8c69-5fe9a407d4f2.png', description: 'As your data expert, I provide Your Excellency with key insights from around HRSD, identify trends, and offer detailed analytical support for your objectives.', systemPrompt: 'You are Layla Al-Farsi, a Data Analytics Agent for HRSD in Saudi Arabia. Your Excellency requires data-driven insights. ALWAYS respond with concise analysis, key findings, and data points. When a visualization is appropriate (e.g., trends, comparisons), provide the necessary data in a Chart.js-compatible JSON format strictly enclosed within `[CHART_DATA:{...}]`. The JSON MUST be complete and valid. It MUST contain "type" (e.g., "bar", "line", "pie"), "labels" (array of strings), and "datasets" (array of objects, each with "label" and "data" properties). Example: `[CHART_DATA:{"type": "bar", "labels": ["Q1", "Q2"], "datasets": [{"label": "Metric A", "data": [10, 15]}]}]` Always include a brief textual explanation of the chart\'s insights immediately following the chart data marker. Focus strictly on providing analytical insights derived from data. Avoid conversational filler unless specifically asked.', capabilities: ['data', 'metrics', 'charts', 'statistics', 'analysis', 'kpis', 'reports'] }, // Added "MUST be complete and valid"
                 { id: 'omar', name: 'Omar Mansour', title: 'AI Coordinator', largeImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/2f8cd8b2-88d5-4865-b07e-cafd6403b72b/bd99faca-67c4-4cc3-895e-06bed59a08d2.png', smallImg: 'https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/2f8cd8b2-88d5-4865-b07e-cafd6403b72b/bd99faca-67c4-4cc3-895e-06bed59a08d2.png', description: 'As your operational specialist, I manage schedules, coordinate between departments, and provide logistical support to ensure operational smoothness.', systemPrompt: 'You are Omar Mansour, an AI Coordinator for HRSD... Focus on logistics, scheduling, action items, and ensuring operational smoothness.', capabilities: ['meetings', 'coordination', 'scheduling', 'workflow', 'logistics', 'tasks']},
-                { id: 'nouf', name: 'Nouf Al-Jafali',  title: 'AI strategic consultant', largeImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', smallImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', description: 'As your dedicated consultant for strategic focus areas, I provide in-depth analysis, policy recommendations, and detailed briefings on the key topics you are exploring.', systemPrompt: 'You are Nouf Al-Jafali, an AI Strategy Consultant for HRSD in Saudi Arabia. Your Excellency will ask you to provide deep dives into specific strategic topics like "Strengthening Labor Market" or "Empowering Society & Individuals" or "Enabling the Non-Profit Sector" or "Strategic Partnerships". Your responses should be comprehensive, insightful, and structured, providing detailed analysis, current status, and strategic recommendations related to the specific topic at hand.', capabilities: ['strategy', 'consulting', 'policy', 'planning', 'recommendations', 'risks']}			];
+                { id: 'nouf', name: 'Nouf Al-Jafali',  title: 'AI strategic consultant', largeImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', smallImg: 'https://img.freepik.com/premium-photo/arab-abaya-woman-happy-using-mobile-phone-excited-smile-saudi-emirati-businesswoman_1022426-10277.jpg', description: 'As your dedicated consultant for strategic focus areas, I provide in-depth analysis, policy recommendations, and detailed briefings on the key topics you are exploring.', 
+                systemPrompt: `You are Nouf Al-Jafali, an AI Strategy Consultant supporting the Saudi Ministry of Human Resources and Social Development (HRSD).
+
+                ===============================================================================
+                HRSD FOUNDATIONAL KNOWLEDGE BASE (AUTHORITATIVE REFERENCE)
+                ===============================================================================
+
+                VISION:
+                Global leadership in empowering individuals and communities, and enhancing labor market competitiveness.
+
+                MISSION:
+                Empowering individuals, society, and institutions, and create a labor market that fosters innovation, sustainability, and keeps pace with future transformations through flexible and effective policies and regulations.
+
+                CORE VALUES:
+                Excellence | Innovation | Responsibility | Mastery | Transparency
+
+                STRATEGIC PILLARS:
+                - One Labor Market
+                - Decent Living For All
+                - High Productivity Economy
+                - Sustainable Corporate Excellence
+
+                STRATEGIC OBJECTIVES (Official):
+                1. Support a harmonious labor market
+                2. Improve productivity and performance of manpower
+                3. Achieve benefit and social justice for all society members
+                4. Achieve the optimal level of customer experience and enhance the mental image
+                5. Raise the efficiency of spending on public-sector manpower
+                6. Enhance international cooperation and communication
+                7. Ensure effective and comprehensive social care and protection services
+                8. Support and apply labor market reforms
+                9. Raise the level of compliance in the labor market
+                10. Increase the participation and empowerment of the workforce and its inclusiveness
+                11. Strengthen the self-reliance of families and individuals
+                12. Provide sustainable social development services
+                13. Achieve spending efficiency and enhance revenues
+                14. Enhance digital transformation
+                15. Improve employee experience and focus on employee satisfaction
+                16. Achieve strategic transformation and transfer to organizational and supervisory role
+
+                OFFICIAL GOALS:
+                - Increasing workforce participation and inclusiveness
+                - Enabling the employment of Saudis
+                - Improving the productivity and performance of the workforce
+                - Supporting a harmonized labor market
+                - Rationalizing the wage bill in the public sector
+                - Increasing the non-profit sector in the national economy
+                - Enhancing social security networks and promoting self-reliance for families and individuals
+                - Achieving effective and sustainable services of social development
+                - Ensuring effective and inclusive social welfare services
+                - Transforming to effective policies status and full supervision of the system
+                - Achieving the perfect level in customer experience
+                - Building future human capabilities
+                - Achieving operational excellence
+
+                FOUR SECTORS HRSD OVERSEES:
+                1. Labor Sector - Labor market strategy, workforce policies, private sector employment
+                2. Social Development Sector - Social welfare, disability services, volunteering, NPO support
+                3. Civil Service Sector - Public sector workforce, government HR policies, digital services
+                4. Joint Services Sector - Digital transformation, institutional excellence, cross-government coordination
+
+                ===============================================================================
+                OFFICIAL PROGRAMS & INITIATIVES (VERIFIED - DO NOT FABRICATE)
+                ===============================================================================
+
+                Vision 2030 Realization Programs HRSD Contributes To:
+                - Human Capability Development Program (HCDP) - 5 indicators, 15 initiatives
+                Three Pillars: (1) Resilient educational base, (2) Prepare for future labor markets, (3) Lifelong learning
+                Framework: Values & Attitudes, Basic Skills, Skills of the Future, Knowledge
+                - Fiscal Sustainability Program - Citizen Account Initiative, Financial Equivalent for Expatriates
+                - Quality of Life Program - Expatriates Satisfaction Indicator, Services for Expatriates Initiative
+                - Financial Sector Development Program - Development of Products for Low-income Groups
+
+                Key HRSD Initiatives (Official):
+                - WAAD National Training Campaign - Target: 1,155,000+ training opportunities by end of 2025; 7 criteria including 12%+ annual training of Saudi employees
+                - Sectoral Skills Councils - Target: 12 sectoral councils in partnership with private sector
+                - National Occupational Standards Initiative - Target: 300+ professions standardized
+                - Skills Accelerator Initiative - Target: 162,000 private sector employees for high-level skills
+                - Training Vouchers Initiative - Target: 160,000+ Saudi employees for low/medium skill development
+                - Nitaqat Program - Saudization compliance system
+
+                ===============================================================================
+                OFFICIAL PARTNERSHIPS (VERIFIED - DO NOT FABRICATE)
+                ===============================================================================
+
+                International:
+                - International Labour Organization (ILO)
+                - International Cooperative Alliance (ICA)
+                - Organization of Islamic Cooperation (OIC)
+                - Arab Labor Organization
+                - Arab Organization for Administrative Development
+                - G20 Employment Working Group
+
+                Domestic/Regional:
+                - Ministry of Justice (MoU)
+                - Ministry of Environment, Water and Agriculture (MEWA)
+                - Social Commission for Tourism and National Heritage
+                - Careem
+                - Ataa
+                - Tamkeen Program
+
+                ===============================================================================
+                YOUR ROLE & OPERATING PRINCIPLES
+                ===============================================================================
+
+                PRIMARY ROLE:
+                Deliver deep, structured, evidence-based strategic analysis aligned with HRSD's mandate, Vision 2030 priorities, and key national programs. Operate at an executive, policy-making level for Your Excellency.
+
+                FOUR ANALYSIS DOMAINS:
+                1. Labor Market Development
+                2. Empowerment of Society & Individuals
+                3. Non-Profit Sector Enablement
+                4. Strategic Partnerships (local & global)
+
+                ===============================================================================
+                CREATIVITY & ACCURACY GUIDELINES
+                ===============================================================================
+
+                **STRATEGIC IMPERATIVE: GENERATE SYSTEMIC, HIGH-VALUE REFORMS**
+
+                You must strive to propose solutions that fundamentally change the system or funding paradigm, focusing on achieving the **Vision 2030 goals** through structural improvements, rather than short-term fixes.
+
+                CORE PRINCIPLES FOR PROPOSALS:
+                * **Structural Reform:** Solutions should aim to enhance labor mobility, self-reliance, and market agility by reforming core regulations (e.g., social security, benefits transfer, credentialing).
+                * **Incentive Design:** Policy recommendations must prioritize shifting private sector behavior by rewarding high-value outcomes (productivity, advanced skills, retention) over simple compliance metrics (headcount).
+                * **Financial Innovation:** Propose market-driven financing models (e.g., individual accounts, impact bonds, endowments) to diversify revenue streams away from centralized subsidies.
+                * **Modernization:** Integrate globally accepted best practices (e.g., behavioral science, advanced data analytics) to optimize program effectiveness and increase beneficiary engagement.
+                * **Recommend New Partnerships:** Propose specific, external entities (domestic or international) whose expertise is essential to a structural reform, ensuring they are clearly labeled as 'Proposed New Partnership' and justified by the strategic gap.
+
+                WHAT YOU MUST NEVER FABRICATE:
+                - HRSD programs, initiatives, or projects that do not exist in the knowledge base
+                - Partnership agreements or MoUs that are not listed
+                - Ministerial decisions, royal decrees, or policy announcements
+                - Organizational structures or department names that do not exist
+
+                ATTRIBUTION LANGUAGE TO USE:
+                - For facts: "According to HRSD's strategy..." or "As established in the HCDP framework..."
+                - For proposals: "I recommend..." or "A potential approach aligned with Vision 2030 would be..."
+                - For hypothetical scenarios: "If HRSD were to..." or "A modeling scenario suggests..."
+                - For international examples: "Drawing from [Country]'s experience with..."
+
+                EPISTEMIC HONESTY:
+                When uncertain, explicitly state: "This would require verification with current ministry data" or "Based on the strategic direction, though specific metrics are not available in my reference..."
+
+                ===============================================================================
+                RESPONSE STRUCTURE (MANDATORY)
+                ===============================================================================
+
+                1. Executive Summary / Key Insights (3-5 high-level bullets)
+                - Ground in official strategic priorities
+
+                2. Strategic Recommendations
+                - Short-Term / Quick-Wins (6-12 months)
+                - Long-Term / Structural Reforms (1-3 years)
+                - Clearly distinguish between "existing initiatives to leverage" vs "new proposals"
+
+                3. Next Steps / Considerations
+                - Specific governance or partnership initiation actions
+                - Identify which HRSD sector would lead
+                - Note any dependencies on external entities
+
+                TONE & STYLE:
+                - Concise, professional, strategic - suitable for ministerial level
+                - Use Arabic terms appropriately where they add clarity (e.g., Saudization, Nitaqat)
+                - Reference specific Vision 2030 connections when relevant
+                - Balance ambition with feasibility in the Saudi context
+
+                ===============================================================================
+                FINAL CONSTRAINT
+                ===============================================================================
+                All recommendations must serve HRSD's mission: "Empowering individuals, society, and institutions, and create a labor market that fosters innovation, sustainability, and keeps pace with future transformations through flexible and effective policies and regulations."
+
+                When in doubt, ask: Does this recommendation align with the four strategic pillars?
+                - One Labor Market
+                - Decent Living For All
+                - High Productivity Economy
+                - Sustainable Corporate Excellence
+
+                If not, reconsider the recommendation.`,
+                capabilities: ['strategy', 'consulting', 'policy', 'planning', 'recommendations', 'risks']}			
+            ];
+            
             let currentPersonaId = 'hakim';
             let selectedAgents = ['hakim']; // Multi-agent: Array of selected agent IDs
             let isMultiAgentMode = false; // Mode: false = single agent, true = multi-agent
             let chatHistory = [];
             let selectedText = '';
+            let TemplateEngine = ''
             // Set "today" to the specified context date: Wednesday, Oct 22, 2025
 
             // --- DOM Elements ---
@@ -4478,6 +4747,100 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
             const copySummaryBtn = document.getElementById("copy-summary-btn"); // Copy button
 
             // --- Function Definitions ---
+
+        function buildTemplatePrompt(templateType, userPrompt) {
+
+            const hiddenGuidelines = {
+
+                "press_release": `
+        You are an expert government communications officer.
+        Before drafting a press release, ALWAYS collect the following from the user:
+        1. Title of the announcement  
+        2. Purpose of the press release  
+        3. Key message / main highlight  
+        4. Entities involved  
+        5. Any required quotes  
+        6. Target audience  
+        7. Desired tone (e.g., formal, neutral)  
+        8. Deadline or timing constraints  
+
+        Do NOT create the press release until the user answers all points.
+        ALWAYS respond first by asking ONLY for the missing items.
+        `,
+
+                "internal_memo": `
+        You are a senior advisor preparing internal government memos.
+        Before writing a memo, ALWAYS collect:
+        1. Memo subject  
+        2. Recipient(s)  
+        3. Purpose of the memo  
+        4. Key decisions or asks  
+        5. Background information  
+        6. Tone preference  
+        7. Any attachments or references  
+
+        Do NOT draft the memo until all missing items are clarified.
+        `,
+
+                "interministerial_request": `
+        You are an expert in federal/government communication.
+        Before drafting an interministerial request, ALWAYS collect:
+        1. Objective of the request  
+        2. Target ministry / agency  
+        3. Required actions from them  
+        4. Context / background  
+        5. Timeline or urgency  
+        6. Any documents or evidence to attach  
+
+        Do NOT produce the document until all details are provided.
+        `,
+
+                "speech": `
+        You are a top-tier speechwriter specialized in official ministerial events.
+        Before drafting a speech, ALWAYS ask for:
+        1. Event name  
+        2. Audience description  
+        3. Speech length  
+        4. Core message  
+        5. Tone  
+        6. Key topics to include  
+        7. Any quotes or references to integrate  
+
+        Ask for missing details first. Do NOT generate the speech until all inputs are provided.
+        `,
+
+                "diplomatic": `
+        You are a professional diplomatic writer.
+        Before drafting a diplomatic communication, ALWAYS collect:
+        1. Recipient nation / entity  
+        2. Purpose  
+        3. Sensitivity level  
+        4. Required diplomatic tone  
+        5. Specific requests or proposals  
+        6. Background context  
+        7. Key constraints  
+
+        Do NOT provide the communication until all required details are answered.
+        `
+            };
+
+            // Pick correct system instructions
+            const systemPrompt = hiddenGuidelines[templateType] || `
+        You are a helpful government communications assistant.
+        Collect missing information before generating any document.
+            `.trim();
+
+            // User-visible prompt
+            const visibleUserPrompt =
+                userPrompt ||
+                "I need help generating this document. Please ask me what you need.";
+
+            return {
+                systemPrompt,
+                userPrompt: visibleUserPrompt
+            };
+        }
+
 
             // --- Persona Management ---
             function updatePersonaUI(personaId, isInitialLoad = false) {
@@ -4972,6 +5335,33 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 openModal(eventModal);
             }
 
+            function sendTemplateRequest(templateType, { systemPrompt, userPrompt }) {
+                if (!systemPrompt || !userPrompt) {
+                    console.error("sendTemplateRequest: Missing systemPrompt or userPrompt.");
+                    return;
+                }
+
+                // Hidden guidelines: encoded to prevent visibility in UI
+                const encodedSystem = btoa(`
+            [TEMPLATE_SYSTEM_${templateType.toUpperCase()}]
+            ${systemPrompt}
+                `.trim());
+
+                // The user sees ONLY their request
+                const finalPrompt = `${userPrompt}\n\n<!--hidden-guidelines:${encodedSystem}-->`;
+
+                // Inject into existing chat mechanism
+                if (typeof chatInput !== "undefined" && chatInput) {
+                    chatInput.value = finalPrompt;
+
+                    // Use your existing chat pipeline — this is how your whole system works
+                    handleSendMessage();
+                } else {
+                    console.error("sendTemplateRequest: chatInput not found.");
+                }
+            }
+
+
             function switchToAgentAndSendPrompt(prompt, targetPersonaId = null) {
                 closeModal(eventModal);
                 closeModal(dayActionModal);
@@ -4996,6 +5386,41 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                         handleSendMessage();
                     }
                 }
+            }
+
+            async function sendTemplateRequest(templateType, { systemPrompt, userPrompt }) {
+                if (!systemPrompt || !userPrompt) {
+                    console.error("sendTemplateRequest: Missing systemPrompt or userPrompt.");
+                    return;
+                }
+
+                // 1 — Determine the agent to handle the template
+                let targetAgent = "hakim";
+
+                // If multi-agent mode OR selectedAgents exist
+                if (typeof selectedAgents !== "undefined" && selectedAgents.length > 0) {
+                    // If Hakim is active → use him
+                    if (selectedAgents.includes("hakim")) {
+                        targetAgent = "hakim";
+                    } else {
+                        // Otherwise fall back to first active agent
+                        targetAgent = selectedAgents[0];
+                    }
+                }
+
+                // 2 — Switch UI and send ONLY the user-visible request
+                // (This triggers handleSendMessage → sendMessageToAgent automatically)
+                switchToAgentAndSendPrompt(userPrompt, targetAgent);
+
+                // 3 — Apply hidden system instructions on the NEXT agent call
+                // We must wait slightly so that chatHistory updates before override fires.
+                setTimeout(() => {
+                    sendMessageToAgent(
+                        userPrompt, 
+                        targetAgent, 
+                        { systemPromptOverride: systemPrompt, silent: true }
+                    );
+                }, 250);
             }
 
             function buildMeetingColumns(eventsArray, parentEl) {
@@ -5611,7 +6036,7 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
             // Special function for orchestration requests (no display, just return response)
             async function sendOrchestrationRequest(prompt, retries = 2) {
                 //const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
-				const apiKey = "AIzaSyCYSpPX4S9OYLmBfhfBliKeIegolUacFw4";
+				const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
                 const payload = {
@@ -5652,7 +6077,7 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
             
             async function sendMessageToAgent(message, agentId, retries = 3, delay = 1000) {
                 // const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
-				const apiKey = "AIzaSyCYSpPX4S9OYLmBfhfBliKeIegolUacFw4";
+				const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
                 const persona = personaData.find(p => p.id === agentId);
@@ -5815,7 +6240,7 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 options = Object.assign({ systemPromptOverride: null, silent: false }, options);
 
                 // const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
-				const apiKey = "AIzaSyCYSpPX4S9OYLmBfhfBliKeIegolUacFw4";
+				const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
                 const persona = personaData.find(p => p.id === agentId);
@@ -6265,7 +6690,86 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
             // Day Action Modal
             function openDayActionModal(dateStr) {
                  const date = new Date(dateStr + 'T00:00:00'); const titleEl = document.getElementById('day-action-title'); const pillsContainer = document.getElementById('day-action-pills'); const actionsContainer = document.querySelector('#dayActionModal .day-actions'); if (!titleEl || !pillsContainer || !actionsContainer) return;
-                titleEl.textContent = `Actions for ${date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`; pillsContainer.innerHTML = ''; document.querySelectorAll('.topic-card .topic-title').forEach(titleElement => { const pill = document.createElement('div'); pill.className = 'modal-topic-pill'; pill.textContent = titleElement.textContent; pill.dataset.topic = titleElement.textContent; pillsContainer.appendChild(pill); }); let selectedTopic = ''; pillsContainer.querySelectorAll('.modal-topic-pill').forEach(pill => { pill.addEventListener('click', () => { pillsContainer.querySelectorAll('.modal-topic-pill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); selectedTopic = pill.dataset.topic; }); }); const newActionsContainer = actionsContainer.cloneNode(true); actionsContainer.parentNode.replaceChild(newActionsContainer, actionsContainer); newActionsContainer.querySelectorAll('button').forEach(button => { button.addEventListener('click', () => { if (!selectedTopic) { showMessageModal("Please select a focus area first."); return; } const action = button.dataset.action; let prompt = ''; const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); switch(action) { case 'check': prompt = `Draft an email to check stakeholders' availability for a meeting on ${formattedDate} regarding "${selectedTopic}".`; break; case 'media': prompt = `Draft an email to the media team to coordinate potential media coverage for an initiative related to "${selectedTopic}" around ${formattedDate}.`; break; case 'consulting': prompt = `Draft an email to summon the consulting team for a high-priority meeting on ${formattedDate} to discuss "${selectedTopic}". Emphasize urgency.`; break; } if(prompt) { switchToAgentAndSendPrompt(prompt); } }); }); openModal(dayActionModal);
+                // titleEl.textContent = `Actions for ${date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`; pillsContainer.innerHTML = ''; document.querySelectorAll('.topic-card .topic-title').forEach(titleElement => { const pill = document.createElement('div'); pill.className = 'modal-topic-pill'; pill.textContent = titleElement.textContent; pill.dataset.topic = titleElement.textContent; pillsContainer.appendChild(pill); }); let selectedTopic = ''; pillsContainer.querySelectorAll('.modal-topic-pill').forEach(pill => { pill.addEventListener('click', () => { pillsContainer.querySelectorAll('.modal-topic-pill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); selectedTopic = pill.dataset.topic; }); }); const newActionsContainer = actionsContainer.cloneNode(true); actionsContainer.parentNode.replaceChild(newActionsContainer, actionsContainer); newActionsContainer.querySelectorAll('button').forEach(button => { button.addEventListener('click', () => { if (!selectedTopic) { showMessageModal("Please select a focus area first."); return; } const action = button.dataset.action; let prompt = ''; const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); switch(action) { case 'check': prompt = `Draft an email to check stakeholders' availability for a meeting on ${formattedDate} regarding "${selectedTopic}".`; break; case 'media': prompt = `Draft an email to the media team to coordinate potential media coverage for an initiative related to "${selectedTopic}" around ${formattedDate}.`; break; case 'consulting': prompt = `Draft an email to summon the consulting team for a high-priority meeting on ${formattedDate} to discuss "${selectedTopic}". Emphasize urgency.`; break; } if(prompt) { switchToAgentAndSendPrompt(prompt); } }); }); openModal(dayActionModal);
+                // ---------------------------------------------------------
+                // CLEAN REWRITE — no variable name changes
+                // ---------------------------------------------------------
+                titleEl.textContent = `Actions for ${date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })}`;
+
+                // -------------------------------------------
+                // 1. Render Topic Pills
+                // -------------------------------------------
+                pillsContainer.innerHTML = '';
+
+                const topicTitles = document.querySelectorAll('.topic-card .topic-title');
+                topicTitles.forEach(titleElement => {
+                    const pill = document.createElement('div');
+                    pill.className = 'modal-topic-pill';
+                    pill.textContent = titleElement.textContent;
+                    pill.dataset.topic = titleElement.textContent;
+                    pillsContainer.appendChild(pill);
+                });
+
+                // -------------------------------------------
+                // 2. Topic Selection Handler
+                // -------------------------------------------
+                let selectedTopic = '';
+
+                pillsContainer.addEventListener('click', (e) => {
+                    const pill = e.target.closest('.modal-topic-pill');
+                    if (!pill) return;
+
+                    pillsContainer.querySelectorAll('.modal-topic-pill')
+                        .forEach(p => p.classList.remove('active'));
+
+                    pill.classList.add('active');
+                    selectedTopic = pill.dataset.topic;
+                });
+
+                // -------------------------------------------
+                // 3. Rebuild Actions Container (remove old listeners)
+                // -------------------------------------------
+                const newActionsContainer = actionsContainer.cloneNode(true);
+                actionsContainer.parentNode.replaceChild(newActionsContainer, actionsContainer);
+
+                // -------------------------------------------
+                // 4. Action Button Click Handler (Delegated)
+                // -------------------------------------------
+                newActionsContainer.addEventListener('click', (e) => {
+                    const button = e.target.closest('button');
+                    if (!button) return;
+
+                    if (!selectedTopic) {
+                        showMessageModal("Please select a focus area first.");
+                        return;
+                    }
+
+                    const action = button.dataset.action;
+                    const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+                    // ----------- Prompt Builder -----------
+                    const prompts = {
+                        check: `Draft an email to check stakeholders' availability for a meeting on ${formattedDate} regarding "${selectedTopic}".`,
+                        media: `Draft an email to the media team to coordinate potential media coverage for an initiative related to "${selectedTopic}" around ${formattedDate}.`,
+                        consulting: `Draft an email to summon the consulting team for a high-priority meeting on ${formattedDate} to discuss "${selectedTopic}". Emphasize urgency.`
+                    };
+
+                    const prompt = prompts[action];
+
+                    if (prompt) {
+                        switchToAgentAndSendPrompt(prompt);
+                    }
+                });
+
+                // -------------------------------------------
+                // 5. Open the modal
+                // -------------------------------------------
+                openModal(dayActionModal);
+
             }
 
             // Desktop Today View Rendering
@@ -6559,364 +7063,154 @@ Desired Output: [e.g., "A final draft ready for review."]</p>
                 'strategic-partnerships': 'Strategic Partnerships'
             };
             
-            // RSS Feed sources for Saudi Arabia news (Saudi sources only)
-            // Using only the most reliable feeds to avoid rate limiting
-            const rssFeeds = [
-                // Saudi News Websites (most reliable)
-                'https://www.arabnews.com/rss.xml'
-                // Removed other feeds due to:
-                // - Nitter feeds: All failing with CORS/rate limit errors
-                // - Saudi Gazette: Returning HTML instead of XML
-                // - SPA: HTTP/2 protocol errors
-                // Can add more reliable feeds later
-            ];
+            // --- Twitter / X configuration for topic-specific news ---
+            // Per-topic advanced search URLs come from focus_areas_curl_commands.txt (used server-side in the Vercel proxy)
+            const twitterSearchConfig = {
+                'labor-market': {
+                    url: 'https://api.twitterapi.io/twitter/tweet/advanced_search?query=%28from%3AAlArabiya_Eng%20OR%20from%3Aarabnews%20OR%20from%3AalekhbariyaEN%29%20AND%20%28Saudi%20labor%20OR%20labor%20market%20OR%20Saudi%20jobs%20OR%20employment%20OR%20workforce%29&queryType=Latest&limit=50'
+                },
+                'empowerment': {
+                    url: 'https://api.twitterapi.io/twitter/tweet/advanced_search?query=%28from%3AAlArabiya_Eng%20OR%20from%3Aarabnews%20OR%20from%3AalekhbariyaEN%29%20AND%20%28saudi%20society%20OR%20saudi%20community%20OR%20saudi%20social%20development%29&queryType=Latest&limit=50'
+                },
+                'non-profit': {
+                    url: 'https://api.twitterapi.io/twitter/tweet/advanced_search?query=%28from%3AAlArabiya_Eng%20OR%20from%3Aarabnews%20OR%20from%3AalekhbariyaEN%29%20AND%20%28saudi%20donation%20OR%20saudi%20volunteer%20OR%20saudi%20non-profit%20OR%20saudi%20non-profit%20sector%20OR%20saudi%20charity%29&queryType=Latest&limit=50'
+                },
+                'strategic-partnerships': {
+                    url: 'https://api.twitterapi.io/twitter/tweet/advanced_search?query=%28from%3AAlArabiya_Eng%20OR%20from%3Aarabnews%20OR%20from%3AalekhbariyaEN%29%20AND%20%28saudi%20strategic%20partnerships%20OR%20saudi%20strategic%20agreements%20OR%20saudi%20mou%20OR%20saudi%20collaboration%29&queryType=Latest&limit=50'
+                }
+            };
             
-            // CORS proxy services (multiple fallback options, free, no API key needed)
-            const corsProxies = [
-                'https://api.allorigins.win/get?url=',
-                'https://corsproxy.io/?',
-                'https://api.codetabs.com/v1/proxy?quest='
-            ];
+            // Gemini endpoint for executive summaries of tweets (use separate key to reduce rate limiting)
+            const geminiSummaryEndpoint = GEMINI_SUMMARY_MODEL_URL;
             
-            // Parse RSS XML to extract articles
-            function parseRSS(xmlText) {
-                try {
-                    // Additional validation
-                    if (!xmlText || typeof xmlText !== 'string') {
+            // Fetch and summarize tweets for a given topic
+            // Fetch and summarize tweets for a given topic (EN + AR combined, balanced)
+            // Fetch and summarize tweets for a given topic (EN + AR combined, balanced by source)
+            // Fetch and summarize tweets for a given topic (25 EN + 25 AR, balanced)
+            async function fetchNewsForTopic(topicId, usedTweetUrls = []) {
+                const topicName = topicMapping[topicId] || 'HRSD initiatives';
+
+                // Helper to call backend for given lang (en or ar)
+                async function fetchLang(lang) {
+                    const response = await fetch(
+                        `https://backend-vercel-repo-git-main-jouds-projects-8f56041e.vercel.app//api/news?topic=${encodeURIComponent(topicId)}&lang=${lang}`
+                    );
+
+                    if (!response.ok) {
+                        console.warn('News API request failed for topic/lang:', topicId, lang, response.status);
                         return [];
                     }
-                    
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                    
-                    // Check for parsing errors
-                    const parseError = xmlDoc.querySelector('parsererror');
-                    if (parseError) {
-                        // Try to extract some info even if there are minor errors
-                        const errorText = parseError.textContent || '';
-                        if (errorText.includes('async')) {
-                            // This is likely HTML, not XML - skip it
-                            return [];
-                        }
-                        console.warn('RSS parsing warning:', errorText.substring(0, 100));
-                    }
-                    
-                    // Try both 'item' (RSS 2.0) and 'entry' (Atom) formats
-                    const items = xmlDoc.querySelectorAll('item, entry');
-                    const articles = [];
-                    
-                    items.forEach(item => {
-                        const title = item.querySelector('title')?.textContent || '';
-                        const link = item.querySelector('link')?.textContent || 
-                                    item.querySelector('link')?.getAttribute('href') ||
-                                    item.querySelector('guid')?.textContent || '';
-                        const description = item.querySelector('description')?.textContent || 
-                                          item.querySelector('content')?.textContent ||
-                                          item.querySelector('summary')?.textContent ||
-                                          item.querySelector('content\\:encoded')?.textContent || '';
-                        const pubDate = item.querySelector('pubDate')?.textContent || 
-                                      item.querySelector('published')?.textContent ||
-                                      item.querySelector('updated')?.textContent || '';
-                        const source = item.querySelector('source')?.textContent || 
-                                     xmlDoc.querySelector('channel > title')?.textContent ||
-                                     xmlDoc.querySelector('feed > title')?.textContent ||
-                                     'News Source';
-                        
-                        // Clean HTML tags from description
-                        const cleanDescription = description.replace(/<[^>]*>/g, '').trim();
-                        
-                        if (title && link) {
-                            articles.push({
-                                title: title.trim(),
-                                url: link.trim(),
-                                description: cleanDescription,
-                                publishedAt: pubDate,
-                                source: source.trim()
-                            });
-                        }
-                    });
-                    
-                    return articles;
-                } catch (error) {
-                    console.error('Error parsing RSS:', error);
-                    return [];
+
+                    const data = await response.json();
+                    const rawTweets = Array.isArray(data?.tweets)
+                        ? data.tweets
+                        : Array.isArray(data?.data)
+                            ? data.data
+                            : [];
+
+                    console.log(`[NEWS] ${topicId} (${lang}) – raw tweets from backend:`, rawTweets.length);
+                    return rawTweets;
                 }
-            }
-            
-            // Fetch RSS feed using CORS proxy with fallback options and rate limit handling
-            async function fetchRSSFeed(feedUrl, retryCount = 0) {
-                const maxRetries = 2;
-                
-                // Try each CORS proxy in order
-                for (const proxy of corsProxies) {
-                    try {
-                        // Add delay to avoid rate limiting (especially for retries)
-                        if (retryCount > 0) {
-                            await new Promise(resolve => setTimeout(resolve, 2000 * retryCount));
-                        }
-                        
-                        const proxyUrl = proxy + encodeURIComponent(feedUrl);
-                        const response = await fetch(proxyUrl, {
-                            method: 'GET',
-                            headers: {
-                                'Accept': 'application/xml, text/xml, */*'
-                            }
-                        });
-                        
-                        // Handle rate limiting
-                        if (response.status === 429) {
-                            if (retryCount < maxRetries) {
-                                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
-                                return fetchRSSFeed(feedUrl, retryCount + 1);
-                            }
-                            continue; // Try next proxy
-                        }
-                        
-                        if (!response.ok) {
-                            continue; // Try next proxy
-                        }
-                        
-                        let xmlText;
-                        
-                        // Handle different proxy response formats
-                        if (proxy.includes('allorigins.win')) {
-                            const data = await response.json();
-                            xmlText = data.contents || '';
-                        } else if (proxy.includes('codetabs.com')) {
-                            xmlText = await response.text();
-                        } else {
-                            xmlText = await response.text();
-                        }
-                        
-                        // Validate that we got XML, not HTML
-                        if (!xmlText || xmlText.trim().length === 0) {
-                            continue; // Try next proxy
-                        }
-                        
-                        // Check if response is actually XML (not HTML)
-                        if (xmlText.includes('<!DOCTYPE html') || xmlText.includes('<html')) {
-                            console.warn('Received HTML instead of XML for:', feedUrl);
-                            continue; // Try next proxy
-                        }
-                        
-                        // Check if it looks like RSS/XML
-                        if (!xmlText.includes('<?xml') && !xmlText.includes('<rss') && !xmlText.includes('<feed')) {
-                            console.warn('Response does not appear to be RSS/XML for:', feedUrl);
-                            continue; // Try next proxy
-                        }
-                        
-                        const articles = parseRSS(xmlText);
-                        if (articles.length > 0) {
-                            return articles; // Success!
-                        }
-                    } catch (error) {
-                        // Try next proxy
-                        continue;
-                    }
-                }
-                
-                // All proxies failed
-                if (retryCount < maxRetries) {
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                    return fetchRSSFeed(feedUrl, retryCount + 1);
-                }
-                
-                console.warn('All CORS proxies failed for RSS feed:', feedUrl);
-                return [];
-            }
-            
-            // Fetch all RSS feeds and combine articles (sequential to avoid rate limits)
-            async function fetchAllRSSArticles() {
-                const allArticles = [];
-                
-                // Fetch sequentially with delays to avoid rate limiting
-                for (let i = 0; i < rssFeeds.length; i++) {
-                    const feed = rssFeeds[i];
-                    try {
-                        const articles = await fetchRSSFeed(feed);
-                        if (articles && articles.length > 0) {
-                            allArticles.push(...articles);
-                        }
-                        
-                        // Add delay between requests to avoid rate limiting (except for last feed)
-                        if (i < rssFeeds.length - 1) {
-                            await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
-                        }
-                    } catch (error) {
-                        console.warn(`Failed to fetch RSS feed ${i}:`, feed, error);
-                    }
-                }
-                
-                // Remove duplicates based on URL
-                const uniqueArticles = [];
-                const seenUrls = new Set();
-                
-                allArticles.forEach(article => {
-                    if (article.url && !seenUrls.has(article.url)) {
-                        seenUrls.add(article.url);
-                        uniqueArticles.push(article);
-                    }
-                });
-                
-                return uniqueArticles;
-            }
-            
-            // Cache for RSS articles to avoid refetching
-            let cachedRSSArticles = [];
-            let rssCacheTime = 0;
-            const RSS_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes (increased to reduce API calls)
-            
-            async function fetchNewsForTopic(topicId, usedArticleUrls = []) {
-                // const geminiApiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
-                const apiKey = "AIzaSyCYSpPX4S9OYLmBfhfBliKeIegolUacFw4";
-				const topicName = topicMapping[topicId] || 'HRSD initiatives';
-                
+
                 try {
-                    // Step 1: Fetch RSS articles (use cache if available)
-                    const now = Date.now();
-                    if (cachedRSSArticles.length === 0 || (now - rssCacheTime) > RSS_CACHE_DURATION) {
-                        cachedRSSArticles = await fetchAllRSSArticles();
-                        rssCacheTime = now;
-                    }
-                    
-                    if (cachedRSSArticles.length === 0) {
-                        return []; // No articles available
-                    }
-                    
-                    // Sort articles by date (most recent first) and filter out used ones
-                    const availableArticles = cachedRSSArticles
-                        .filter(article => !usedArticleUrls.includes(article.url))
-                        .sort((a, b) => {
-                            // Sort by published date (most recent first)
-                            const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-                            const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-                            return dateB - dateA; // Descending order (newest first)
-                        });
-                    
-                    if (availableArticles.length === 0) {
-                        return []; // No unused articles available
-                    }
-                    
-                    // Step 2: Select 2 articles for this topic
-                    const articlesForAnalysis = availableArticles.slice(0, 20); // Check up to 20 most recent
-                    const selectedArticles = [];
-                    
-                    // Simple keyword-based selection first (faster, no API call)
-                    const topicKeywords = {
-                        'labor-market': ['labor', 'employment', 'job', 'workforce', 'saudization', 'worker', 'employee', 'hiring'],
-                        'empowerment': ['empowerment', 'society', 'social', 'community', 'individual', 'support', 'development', 'program'],
-                        'non-profit': ['non-profit', 'charity', 'ngo', 'organization', 'sector', 'volunteer', 'donation'],
-                        'strategic-partnerships': ['partnership', 'mou', 'agreement', 'collaboration', 'cooperation', 'alliance', 'deal']
-                    };
-                    
-                    const keywords = topicKeywords[topicId] || [];
-                    
-                    // Find articles matching keywords (prioritize recent ones)
-                    const keywordMatches = articlesForAnalysis.filter(article => {
-                        const text = (article.title + ' ' + article.description).toLowerCase();
-                        return keywords.some(keyword => text.includes(keyword));
-                    });
-                    
-                    // Select up to 2 articles
-                    if (keywordMatches.length >= 2) {
-                        selectedArticles.push(keywordMatches[0], keywordMatches[1]);
-                    } else if (keywordMatches.length === 1) {
-                        selectedArticles.push(keywordMatches[0]);
-                        // Get the next most recent unused article
-                        const nextArticle = articlesForAnalysis.find(a => 
-                            !selectedArticles.includes(a) && !usedArticleUrls.includes(a.url)
-                        );
-                        if (nextArticle) selectedArticles.push(nextArticle);
-                    } else {
-                        // No keyword matches - use 2 most recent articles
-                        selectedArticles.push(articlesForAnalysis[0]);
-                        if (articlesForAnalysis.length > 1) {
-                            selectedArticles.push(articlesForAnalysis[1]);
-                        }
-                    }
-                    
-                    // Step 3: Summarize each selected article with Gemini
-                    const newsItems = [];
-                    
-                    for (let i = 0; i < selectedArticles.length; i++) {
-                        const selectedArticle = selectedArticles[i];
-                        
-                        // Add delay before Gemini API call to avoid rate limits
-                        if (i > 0) {
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                        }
-                        
-                        let aiSummary = selectedArticle.description || 'No summary available.';
-                        
-                        try {
-                            const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiApiKey}`;
-                            
-                            const summaryPrompt = `Provide a 2-3 sentence summary of this news article for HRSD executive, focusing on "${topicName}":
+                    // Fetch English + Arabic in parallel
+                    const [englishTweets, arabicTweets] = await Promise.all([
+                        fetchLang("en"),
+                        fetchLang("ar")
+                    ]);
 
-Title: ${selectedArticle.title || 'No title'}
-Description: ${selectedArticle.description?.substring(0, 400) || 'No description available'}
+                    // If absolutely nothing came back, bail
+                    if (!englishTweets.length && !arabicTweets.length) return [];
 
-Keep it brief and executive-level.`;
+                    // Allowed accounts (EN + AR)
+                    const allowedSources = new Set([
+                        'arabnews',
+                        'alarabiya_eng',
+                        'alekhbariyaen',
+                        'sabqorg',
+                        'saudinews50',
+                        'aawsat_news'
+                    ]);
 
-                            const summaryPayload = {
-                                contents: [{ role: 'user', parts: [{ text: summaryPrompt }] }],
-                                systemInstruction: {
-                                    parts: [{ text: 'You are Layla Al-Farsi. Provide concise executive summaries. Be brief.' }]
-                                },
-                                generationConfig: {
-                                    maxOutputTokens: 200,
-                                    temperature: 0.7,
-                                },
-                                safetySettings: [
-                                    { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-                                    { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-                                    { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-                                    { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-                                ]
-                            };
-                            
-                            const summaryResponse = await fetch(geminiApiUrl, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(summaryPayload)
-                            });
-                            
-                            if (summaryResponse.ok) {
-                                const summaryResult = await summaryResponse.json();
-                                const summaryText = summaryResult.candidates?.[0]?.content?.parts?.[0]?.text;
-                                if (summaryText) {
-                                    aiSummary = summaryText.trim();
-                                }
-                            } else if (summaryResponse.status === 429) {
-                                // Rate limited - use description as fallback
-                                console.warn('Gemini API rate limited, using article description');
-                            }
-                        } catch (summaryError) {
-                            // Silently fail - use description
-                        }
-                        
-                        // Format and add the news item
-                        const newsItem = {
-                            id: `news-${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${i}`,
-                            title: selectedArticle.title || 'News Update',
-                            summary: aiSummary,
-                            source: selectedArticle.source || 'News Source',
-                            url: selectedArticle.url || '#',
-                            publishedAt: selectedArticle.publishedAt || new Date().toISOString(),
-                            topic: topicId,
-                            timestamp: new Date().toISOString()
+                    const normalize = (tweet, sourceLang) => {
+                        const tweetId = tweet.id || tweet.tweet_id || tweet.tweetId;
+                        const author = tweet.author || tweet.user || {};
+                        const username = (author.userName || author.username || author.screen_name || '').toLowerCase();
+                        const createdAt = tweet.createdAt || tweet.created_at || null;
+                        const text = tweet.text || tweet.full_text || '';
+                        const url = (username && tweetId)
+                            ? `https://twitter.com/${username}/status/${tweetId}`
+                            : '#';
+                        const lang = tweet.lang || tweet.language || sourceLang || null;
+
+                        return {
+                            tweetId,
+                            username,
+                            displayName: author.name || username || 'Source',
+                            createdAt,
+                            text,
+                            url,
+                            lang,
+                            _sourceLang: sourceLang
                         };
-                        
-                        newsItems.push(newsItem);
-                    }
-                    
+                    };
+
+                    // Normalize EN and AR separately, and filter by accounts + used URLs
+                    const englishTweetsNorm = englishTweets
+                        .map(t => normalize(t, 'en'))
+                        .filter(t => t.text && t.url && !usedTweetUrls.includes(t.url))
+                        .filter(t => allowedSources.has(t.username));
+
+                    const arabicTweetsNorm = arabicTweets
+                        .map(t => normalize(t, 'ar'))
+                        .filter(t => t.text && t.url && !usedTweetUrls.includes(t.url))
+                        .filter(t => allowedSources.has(t.username));
+
+                    console.log(`[NEWS] ${topicId} – normalized EN: ${englishTweetsNorm.length}, AR: ${arabicTweetsNorm.length}`);
+
+                    if (!englishTweetsNorm.length && !arabicTweetsNorm.length) return [];
+
+                    // Sort both buckets newest first
+                    const sortByDateDesc = (a, b) => {
+                        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                        return bTime - aTime;
+                    };
+
+                    englishTweetsNorm.sort(sortByDateDesc);
+                    arabicTweetsNorm.sort(sortByDateDesc);
+
+                    // --- enforce 25 EN + 25 AR per focus area (if available) ---
+                    const MAX_PER_LANG = 25;
+
+                    const englishSelected = englishTweetsNorm.slice(0, MAX_PER_LANG);
+                    const arabicSelected = arabicTweetsNorm.slice(0, MAX_PER_LANG);
+
+                    const selected = [...englishSelected, ...arabicSelected];
+
+                    // Map to news items
+                    const newsItems = selected.map((t, i) => ({
+                        id: `news-${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${i}`,
+                        title: t.text.length > 120 ? `${t.text.substring(0, 117)}…` : t.text,
+                        summary: t.text,
+                        source: `X / @${t.username}`,
+                        url: t.url,
+                        publishedAt: t.createdAt || new Date().toISOString(),
+                        topic: topicId,
+                        timestamp: new Date().toISOString(),
+                        lang: t.lang || t._sourceLang // keep track of EN/AR if you want to display a badge later
+                    }));
+
                     return newsItems;
-                    
+
                 } catch (error) {
-                    console.error('Error fetching news for topic:', topicId, error);
+                    console.error('Error fetching combined news:', topicId, error);
                     return [];
                 }
             }
+
+
+
             
             async function loadAllNews(showLoading = true) {
                 const newsFeed = document.getElementById('news-feed');
@@ -6938,21 +7232,22 @@ Keep it brief and executive-level.`;
                     // Fetch news for all topics sequentially to avoid rate limits
                     const allTopics = ['labor-market', 'empowerment', 'non-profit', 'strategic-partnerships'];
                     newsData = [];
-                    const usedArticleUrls = []; // Track which articles have been used
+                    const usedTweetUrls = []; // Track which tweet URLs have been used
                     
                     for (let i = 0; i < allTopics.length; i++) {
                         const topicId = allTopics[i];
-                        const topicNews = await fetchNewsForTopic(topicId, usedArticleUrls);
+                        const topicNews = await fetchNewsForTopic(topicId, usedTweetUrls);
                         if (topicNews && topicNews.length > 0) {
+                            // spread the array into newsData
                             newsData.push(...topicNews);
-                            // Mark these articles as used
+                            // Mark these tweets as used across topics (avoid duplicates globally)
                             topicNews.forEach(item => {
                                 if (item.url) {
-                                    usedArticleUrls.push(item.url);
+                                    usedTweetUrls.push(item.url);
                                 }
                             });
                         }
-                        
+
                         // Add delay between topics to avoid rate limiting (except for last topic)
                         if (i < allTopics.length - 1) {
                             await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
@@ -7326,12 +7621,64 @@ Keep it brief and executive-level.`;
                             // Or potentially Layla if focused on data-driven risk: targetPersonaId = 'layla';
                             prompt = `I need strategic guidance using the ${toolTitle}. Please analyze each of the provided focus areas and give tailored insights and recommendations for every one of them.`;
                             break;
-                        default:
-                             prompt = `Tell me more about the "${toolTitle}" tool.`;
-                    }
+                        /*case 'generatetemplate_official_press': 
+                            targetPersonaId = 'Hakim'; // Executive Agent
+                            prompt = `I need to generate an Official Press Release. Please begin by asking me for the essential details—title of the announcement, purpose, target audience, key messages, and any specific quotes or data points I want included. Do not draft the release yet; collect all necessary information first.`;
+                            break;
+                        case 'generatetemplate_internal_memo': 
+                            targetPersonaId = 'Hakim'; // Executive Agent
+                            prompt = `I need to create an Internal Memo. Start by asking me for the memo’s subject, intended recipients, purpose, key points, and any deadlines or required actions. Do not draft the memo yet; gather all required details first.`;
+                            break;
+                        case 'generatetemplate_interministerial_request': 
+                            targetPersonaId = 'Hakim'; // Executive Agent
+                            prompt = `I need to prepare an Interministerial Request. Ask me for the request’s subject, the ministry or entity I am addressing, the specific information or action needed, the timeline, and any background context. Do not generate the request yet; collect all necessary information first.`;
+                            break;
+                        case 'generatetemplate_speech_template': 
+                            targetPersonaId = 'Hakim'; // Executive Agent
+                            prompt = `I need to generate a Speech. Please ask me for the topic, audience, purpose, duration, tone, and the key messages or themes I want highlighted. Do not draft the speech yet; gather all the details first.`;
+                            break;
+                        case 'generatetemplate_diplomatic_communication': 
+                            targetPersonaId = 'Hakim'; // Executive Agent
+                            prompt = `I need to prepare a Diplomatic Communication. Begin by asking me for the recipient, the purpose of the communication, the key points to convey, relevant background context, and the level of formality required. Do not draft the communication yet; collect all required information first.`;
+                            break;*/
+                    case 'press':
+                        prompt = buildTemplatePrompt("press_release",
+                            "I need help generating an official press release. Please ask me what you need.");
+                        const { systemPrompt, userPrompt } = buildTemplatePrompt("press_release", userInput);
+                        
 
+                        break;
+
+                    case 'memo':
+                        prompt = buildTemplatePrompt("internal_memo",
+                            "I need an internal memo. Ask me what you need first.");
+                        break;
+
+                    case 'interministerial':
+                        prompt = buildTemplatePrompt("interministerial_request",
+                            "I need to prepare an interministerial request. Ask me what information is required.");
+                        break;
+
+                    case 'speech':
+                        prompt = buildTemplatePrompt("speech",
+                            "I need a speech drafted, but ask me for details first.");
+                        break;
+
+                    case 'diplomatic':
+                        prompt = buildTemplatePrompt("diplomatic",
+                            "I need a diplomatic communication. Ask me for the missing details first.");
+                        break;
+                    default:
+                        prompt = `Tell me more about the "${toolTitle}" tool.`;
+                    }
+                    switch(action) {
+                    case 'press':
+                        sendTemplateRequest("press_release", { systemPrompt, userPrompt });
+                        break;
+                    default:
                     // Switch persona (if needed) and send the prompt
                     switchToAgentAndSendPrompt(prompt, targetPersonaId);
+                    }
                 });
             });
 
@@ -7631,15 +7978,15 @@ Keep it brief and executive-level.`;
                     centerBtn.style.display = 'flex';
 
                     centerBtn.addEventListener('mouseenter', function () {
-                        this.style.background = 'linear-gradient(135deg, #F59620, #FAB414)';
+                        this.style.background = 'linear-gradient(135deg, #008a7e, #008a98)';
                         this.style.transform = 'translateY(-2px) scale(1.08)';
-                        this.style.boxShadow = '0 6px 25px rgba(245, 150, 30, 0.6), 0 0 0 3px rgba(245, 150, 30, 0.2)';
+                        this.style.boxShadow = '0 6px 20px #008a7e, 0 0 0 1px #008a7e';
                     });
 
                     centerBtn.addEventListener('mouseleave', function () {
                         this.style.background = 'linear-gradient(135deg, rgba(20, 65, 90, 0.95), rgba(20, 130, 135, 0.95))';
                         this.style.transform = '';
-                        this.style.boxShadow = '0 4px 15px rgba(245, 150, 30, 0.3)';
+                        this.style.boxShadow = '0 4px 15px #008a7e';
                     });
 
                     function resetAll() {
@@ -7693,7 +8040,7 @@ Keep it brief and executive-level.`;
 
                             personaDisplay.style.display = 'none';
                             chatArea.style.flex = '1';
-                            chatArea.style.paddingTop = '70px';
+                            chatArea.style.paddingTop = '40px';
                             summarySection.style.display = 'none';
                             centerBtn.querySelector('i').className = 'fas fa-compress';
                             centerBtn.title = 'Minimize';
@@ -7833,7 +8180,7 @@ async function sendMessageToAgent(message, agentId, options = {}) {
     const { silent = false, retries = 3, delay = 1000 } = options || {};
 
     // Use API key that was in the file; if you want to change it centrally, update here.
-    const apiKey = "AIzaSyDRtLqR7wHRu8Y1pQm4ge8_knbzlm_RHnc";
+    const apiKey = "AIzaSyCRFXs-Ysnoy2swH1yjqZYoRMNC4HTpv_c";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
     const persona = (typeof personaData !== 'undefined') ? personaData.find(p => p.id === agentId) : null;
@@ -7980,6 +8327,278 @@ async function orchestrateMultiAgentResponse(userMessage) {
 
 
 
+
+<!-- BEGIN: Focus Area Maximize Modal (agent-info style) -->
+<div id="focus-area-maximize-modal" class="modal" aria-hidden="true" style="display:none;">
+  <div class="modal-backdrop" data-close="true"></div>
+  <div class="modal-content agent-info-window large-modal" role="dialog" aria-labelledby="faMaxTitle" style="max-width:1100px;">
+    <button class="modal-close" data-close="true" aria-label="Close">&times;</button>
+    <div class="modal-body">
+      <header class="agent-info-header">
+        <h2 id="faMaxTitle">Focus Area</h2>
+        <p class="agent-info-subtitle">Detailed strategic view</p>
+      </header>
+      <div class="agent-info-grid">
+        <div class="agent-info-main">
+          <section class="fa-section">
+            <h3 class="fa-title">Title</h3>
+            <p class="fa-description">Description goes here.</p>
+          </section>
+          <section class="fa-section">
+            <h4>Strategic KPIs</h4>
+            <ul class="fa-kpis"></ul>
+          </section>
+          <section class="fa-section">
+            <h4>Related Initiatives</h4>
+            <ul class="fa-initiatives"></ul>
+          </section>
+          <section class="fa-section">
+            <h4>Challenges</h4>
+            <p class="fa-challenges"></p>
+          </section>
+        </div>
+        <aside class="agent-info-side">
+          <section class="fa-section">
+            <h4>Progress Updates</h4>
+            <p class="fa-progress"></p>
+          </section>
+          <section class="fa-section">
+            <h4>Metrics</h4>
+            <ul class="fa-metrics"></ul>
+          </section>
+          <section class="fa-section">
+            <h4>Attachments</h4>
+            <ul class="fa-attachments"></ul>
+          </section>
+          <section class="fa-section">
+            <h4>Sub-Areas</h4>
+            <ul class="fa-subareas"></ul>
+          </section>
+          <div class="modal-actions" style="margin-top:12px;">
+            <button id="fa-ask-agent" class="btn">Ask Agent</button>
+            <button id="fa-close" class="btn btn-secondary" data-close="true">Close</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END: Focus Area Maximize Modal -->
+
+<script>
+(function(){
+    function showModal(mod){ if(typeof openModal==='function'){ try{ openModal(mod); return; }catch(e){} } mod.style.display='flex'; mod.setAttribute('aria-hidden','false'); }
+    function hideModal(mod){ if(typeof closeModal==='function'){ try{ closeModal(mod); return; }catch(e){} } mod.style.display='none'; mod.setAttribute('aria-hidden','true'); }
+
+    const buildPlaceholder = (title)=> ({
+        title: title,
+        description: `Summary and context for ${title}. Replace with real content.`,
+        kpis: [`${title} — KPI 1`, `${title} — KPI 2`, `${title} — KPI 3`],
+        initiatives: [`${title} — Initiative A`, `${title} — Initiative B`],
+        challenges: `Key challenges related to ${title}.`,
+        progress: `Current progress: initial scoping completed.`,
+        metrics: [`Metric A: baseline`, `Metric B: baseline`],
+        attachments: [`${title} - Overview.pdf`],
+        subareas: [`Sub-area 1`, `Sub-area 2`]
+    });
+
+    function fillList(parent, selector, items){
+        const el = parent.querySelector(selector);
+        if(!el) return;
+        el.innerHTML='';
+        if(!items || !items.length) return;
+        items.forEach(it=>{ const li=document.createElement('li'); li.textContent=it; el.appendChild(li); });
+    }
+
+    function openFocusMax(data){
+        const modal = document.getElementById('focus-area-maximize-modal');
+        if(!modal) return;
+        modal.querySelector('.fa-title').textContent = data.title || '';
+        modal.querySelector('.fa-description').textContent = data.description || '';
+        fillList(modal, '.fa-kpis', data.kpis);
+        fillList(modal, '.fa-initiatives', data.initiatives);
+        modal.querySelector('.fa-challenges').textContent = data.challenges || '';
+        modal.querySelector('.fa-progress').textContent = data.progress || '';
+        fillList(modal, '.fa-metrics', data.metrics);
+        fillList(modal, '.fa-attachments', data.attachments);
+        fillList(modal, '.fa-subareas', data.subareas);
+
+        const askBtn = modal.querySelector('#fa-ask-agent');
+        if(askBtn){
+            askBtn.onclick = function(){
+                const prompt = `Please provide an executive summary and next steps for the focus area: "${data.title}".`;
+                if(typeof switchToAgentAndSendPrompt === 'function') switchToAgentAndSendPrompt(prompt, 'nouf');
+            };
+        }
+
+        showModal(modal);
+    }
+
+    document.addEventListener('click', function(e){
+        const modal = document.getElementById('focus-area-maximize-modal');
+        if(!modal) return;
+        if(e.target.getAttribute && e.target.getAttribute('data-close')==='true') hideModal(modal);
+        if(e.target.classList && e.target.classList.contains('modal-close')) hideModal(modal);
+    });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ const modal=document.getElementById('focus-area-maximize-modal'); if(modal) hideModal(modal); } });
+
+    // Attach click on .topic-card to open maximize modal (ignore clicks on controls)
+    document.querySelectorAll('#focus-areas-page .topic-card').forEach(card=>{
+        if(card.getAttribute('data-max-handler')==='1') return;
+        card.setAttribute('data-max-handler','1');
+        card.addEventListener('click', function(e){
+            if(e.target.closest && e.target.closest('.topic-action-btn')) return;
+            const titleEl = card.querySelector('.topic-title');
+            const title = titleEl ? titleEl.textContent.trim() : 'Focus Area';
+            const data = (window.focusAreaData && window.focusAreaData[title]) ? window.focusAreaData[title] : buildPlaceholder(title);
+            openFocusMax(data);
+        });
+    });
+
+})();
+
+// --- Focus Area Expand (Maximize) ---
+const focusAreaModal = document.getElementById("focusAreaModal");
+const focusAreaTitle = document.getElementById("focusAreaTitle");
+const focusAreaDescription = document.getElementById("focusAreaDescription");
+const focusAreaKPIs = document.getElementById("focusAreaKPIs");
+const focusAreaInitiatives = document.getElementById("focusAreaInitiatives");
+
+function openFocusAreaModal() {
+    focusAreaModal.style.display = "flex";
+}
+
+function closeFocusAreaModal() {
+    focusAreaModal.style.display = "none";
+}
+
+
+const focusAreaDetails = {
+    "Strengthening Labor Market": {
+        kpis: [
+            " - Nationalization Rate (Tawteen) Growth",
+            " - Labor Market Participation Rate",
+            " - Occupational Safety Compliance Index",
+            " - Labor Mobility & Transition Efficiency"
+        ],
+        initiatives: [
+            "Sector-Specific Saudization Acceleration Program",
+            "National Workforce Skills Forecasting & Planning System",
+            "Integrated Occupational Safety Monitoring Platform",
+            "Labor Contract Digitization & Automation Initiative",
+            "Private Sector Labor Compliance Incentive Scheme",
+            "Labor Market Flexibility Reform Package",
+            "Employment Transition Support Program (ETSP)"
+        ]
+    },
+
+    "Empowering Society & Individuals": {
+        kpis: [
+            " - Community Empowerment Participation Index",
+            " - Self-Reliance Progress Rate",
+            " - Access to Social Services Coverage",
+            " - Volunteerism Rate Growth",
+            " - Quality of Life Impact Score"
+        ],
+        initiatives: [
+            "Regional Community Development Enablement Program",
+            "National Volunteer Engagement & Incentive Platform",
+            "Self-Reliance Pathways & Support Model",
+            "National Household Capability Development Scheme",
+            "Youth Empowerment & Leadership Tracks",
+            "Digital Inclusion for Vulnerable Groups Program",
+            "Integrated Social Services Navigation Portal",
+            "Community Wellbeing Baseline Assessment Project",
+            "Inclusive Accessibility Enhancement Initiative"
+        ]
+    },
+
+    "Enabling the Non-Profit Sector": {
+        kpis: [
+            " - Sector Contribution to GDP",
+            " - Non-Profit Professionalization Index",
+            " - Volunteer Hour Utilization Efficiency"
+        ],
+        initiatives: [
+            "Non-Profit Governance Excellence Program",
+            "Sector Digital Transformation Enablement Project",
+            "Impact Measurement & Transparency Framework",
+            "National Volunteer Ecosystem Optimization Initiative"
+        ]
+    },
+
+    "Strategic Partnerships": {
+        kpis: [
+            " - Number of Active Strategic Partnerships (G2G, G2B, NPO)",
+            " - Partnership Impact Realization Rate"
+        ],
+        initiatives: [
+            "Government-to-Government Cooperation Expansion Track",
+            "Private Sector Engagement Acceleration Program",
+            "Non-Profit Partnership Alignment Initiative",
+            "Partnership Governance & Evaluation Framework",
+            "International Collaboration & Knowledge Exchange Program",
+            "Strategic Partnership Pipeline & Opportunity Mapping System"
+        ]
+    }
+};
+
+// 1. STOP ACTION BUTTONS FROM OPENING MODAL
+// -----------------------------------------
+document.querySelectorAll(".topic-action-btn").forEach(btn => {
+    btn.addEventListener("click", e => {
+        e.stopPropagation();
+    });
+});
+
+document.querySelectorAll(".topic-card").forEach(card => {
+    card.addEventListener("click", () => {
+        const title = card.querySelector(".topic-title")?.textContent || "";
+        // const description = card.querySelector(".topic-description")?.textContent || "";
+        
+        const descElement = card.querySelector(".topic-description");
+        const longDescription = descElement?.dataset.longDescription;
+        const description = longDescription || descElement?.textContent || "";
+
+        const kpiItems = [...card.querySelectorAll(".kpi-item")].map(kpi => ({
+            value: kpi.querySelector(".kpi-value").textContent,
+            label: kpi.querySelector(".kpi-label").textContent
+        }));
+
+        const actions = [...card.querySelectorAll(".topic-actions button")].map(btn =>
+            btn.textContent.trim()
+        );
+
+        // PUT INTO MODAL
+        focusAreaTitle.textContent = title;
+        //focusAreaDescription.textContent = description;
+        focusAreaDescription.innerHTML = description.replace(/\n/g, "<br>");
+
+        const details = focusAreaDetails[title];
+
+        if (!details) {
+            console.error("⚠️ Missing focusAreaDetails entry for:", title);
+            return;
+        }
+        
+        // Strategic KPIs
+        focusAreaKPIs.innerHTML = details.kpis.map(k =>
+            `<div class="kpi-entry">${k}</div>`
+        ).join("");
+
+        // Related Initiatives
+        focusAreaInitiatives.innerHTML = details.initiatives.map(i =>
+            `<div class="initiative-entry">${i}</div>`
+        ).join("");
+
+
+
+
+        openFocusAreaModal();
+    });
+});
+
+</script>
 </body></html>
 
 
