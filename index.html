@@ -5961,8 +5961,16 @@
                             setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 100);
                          }, 0);
                     } else {
-                        setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 0);
-                    }
+                            // Only auto-scroll if the user is already near the bottom
+						    const isNearBottom =
+						        chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight < 150;
+						
+						    if (isNearBottom) {
+						        setTimeout(() => {
+						            chatMessages.scrollTop = chatMessages.scrollHeight;
+						        }, 0);
+						    }
+						}
                 } else {
                     console.error("chatMessages element not found when trying to append message.");
                 }
@@ -8966,6 +8974,7 @@ document.querySelectorAll(".topic-card").forEach(card => {
 
 </script>
 </body></html>
+
 
 
 
