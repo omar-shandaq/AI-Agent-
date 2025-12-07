@@ -6817,7 +6817,7 @@ ${truncatedText}
 
                     const highlight = document.createElement('div');
                     highlight.className = 'urgent-meeting-highlight agenda-summary-item';
-                    highlight.innerHTML = `<h2>Next Up: ${nextEvent.dataset.eventTitle} (${nextEvent.dataset.eventTime || ''})</h4><p>${nextEvent.dataset.eventDetails || ''}</p>`;
+                    highlight.innerHTML = `<h4>Next Up: ${nextEvent.dataset.eventTitle} (${nextEvent.dataset.eventTime || ''})</h4><p>${nextEvent.dataset.eventDetails || ''}</p>`;
                     attachAgendaClick(highlight, nextEvent);
                     summaryContent.appendChild(highlight);
 
@@ -9039,6 +9039,7 @@ document.querySelectorAll(".topic-card").forEach(card => {
 
 </script>
 </body></html>
+
 
 
 
