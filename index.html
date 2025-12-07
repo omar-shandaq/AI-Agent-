@@ -1427,8 +1427,8 @@
         .key-topic-pill:hover { background: var(--primary-blue); color: var(--text-dark); border-color: var(--primary-blue); }
         .urgent-meeting-highlight { background: linear-gradient(135deg, rgba(245, 150, 32, 0.3) 0%, rgba(245, 150, 32, 0.15) 100%); border: 3px solid var(--primary-blue); border-radius: 12px; padding: 18px; margin: 15px 0; box-shadow: 0 0 5px rgba(245, 150, 32, 0.2), 0 2px 8px rgba(245, 150, 32, 0.1); position: relative; overflow: hidden; }
         @keyframes pulseUrgent { 0%, 100% { box-shadow: 0 0 5px rgba(245, 150, 32, 0.2), 0 2px 8px rgba(245, 150, 32, 0.1); } 50% { box-shadow: 0 0 8px rgba(245, 150, 32, 0.3), 0 2px 10px rgba(245, 150, 32, 0.15); } }
-        .urgent-meeting-highlight h4 { color: var(--primary-blue) !important; border-bottom: 2px solid var(--primary-blue) !important; margin-top: 0 !important; font-size: 1.2rem !important; text-shadow: none; }
-        .urgent-meeting-highlight p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+        .urgent-meeting-highlight h4 { color: var(--primary-blue) !important; border-bottom: 2px solid var(--primary-blue) !important; margin-top: 0 !important; font-size: 0.9rem !important; text-shadow: none; }
+        .urgent-meeting-highlight p { color: var(--text-light); font-size: 0.75rem; line-height: 1.6; }
 
         .typing-indicator { display: flex; align-items: center; }
         .typing-indicator span { height: 8px; width: 8px; margin: 0 2px; background-color: var(--primary-blue); border-radius: 50%; display: inline-block; animation: bounce 1.4s infinite ease-in-out both; }
@@ -6817,7 +6817,7 @@ ${truncatedText}
 
                     const highlight = document.createElement('div');
                     highlight.className = 'urgent-meeting-highlight agenda-summary-item';
-                    highlight.innerHTML = `<h4>Next Up: ${nextEvent.dataset.eventTitle} (${nextEvent.dataset.eventTime || ''})</h4><p>${nextEvent.dataset.eventDetails || ''}</p>`;
+                    highlight.innerHTML = `<h2>Next Up: ${nextEvent.dataset.eventTitle} (${nextEvent.dataset.eventTime || ''})</h4><p>${nextEvent.dataset.eventDetails || ''}</p>`;
                     attachAgendaClick(highlight, nextEvent);
                     summaryContent.appendChild(highlight);
 
@@ -9039,6 +9039,7 @@ document.querySelectorAll(".topic-card").forEach(card => {
 
 </script>
 </body></html>
+
 
 
 
